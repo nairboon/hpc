@@ -11,23 +11,24 @@ OBJ = $(patsubst %.c, %.o, ${SRC})
 default: mono
 
 all: mono mpi omp mpiomp
+
 mono: CCOMP = $(CC)
 mono: CCOMPFLAGS = $(FFLAGS)
 mono: LINKFLAGS = $(LDFLAGS)
-mono: $(OBJ)
-	$(CCOMP) $(LINKFLAGS) $(OBJ) -o hydro_mono -lm
+mono: $(SRC)
+	$(CCOMP) -DMONO $(LINKFLAGS) $(SRC) -o hydro_mono -lm
 
 mpi: CCOMP = $(MPICC)
 mpi: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_MPI)
 mpi: LINKFLAGS = $(LDFLAGS) $(LDFLAGS_MPI)
-mpi: $(OBJ)
-	$(CCOMP) $(LINKFLAGS) $(OBJ) -o hydro_mpi -lm
+mpi: $(SRC)
+	$(CCOMP) -DMPI $(LINKFLAGS) $(SRC) -o hydro_mpi -lm
 
 omp: CCOMP = $(CC)
 omp: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_OMP)
 omp: LINKFLAGS = $(LDFLAGS) $(LDFLAGS_OMP)
-omp: $(OBJ)
-	$(CCOMP) $(LINKFLAGS) $(OBJ) -o hydro_omp -lm
+omp: $(SRC)
+	$(CCOMP) -DOMP $(LINKFLAGS) $(SRC) -o hydro_omp -lm
 
 mpiomp: CCOMP = $(MPICC)
 mpiomp: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_MPI) $(FFLAGS_OMP)

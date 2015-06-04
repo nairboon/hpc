@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd  hcode/Src
-make
+make all
