@@ -1,7 +1,7 @@
 # Link make.inc with the targeted architecture in Arch directory
 # For example : ln -s make_sp6 make.inc
 #--------------------------------------
-include ../../../Arch/make.inc
+include ../Arch/make.inc
 
 SRC=cmpflx.c conservar.c equation_of_state.c hydro_godunov.c main.c parametres.c riemann.c trace.c vtkfile.c compute_deltat.c constoprim.c hydro_funcs.c make_boundary.c qleftright.c slope.c utils.c
 
