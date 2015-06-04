@@ -6,7 +6,13 @@
 */
 
 #include <math.h>
+
+#ifdef __APPLE__
+#include <malloc/malloc.h>
+#else
 #include <malloc.h>
+#endif
+
 // #include <unistd.h>
 // #include <stdlib.h>
 #include <string.h>
