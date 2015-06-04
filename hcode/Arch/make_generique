@@ -1,3 +1,8 @@
+MPICC = mpicc
+CC = gcc
+
+
+
 # Fortran compiler
 #-----------------
 F90 = xlf_r
@@ -16,11 +21,11 @@ LDFLAGS = -O4
 
 # OpenMP compilation options
 #---------------------------
-CFLAGS_OMP =  -qsmp=omp
+#CFLAGS_OMP =  -qsmp=omp
 
 # OpenMP link options
 #--------------------
-LDFLAGS_OMP = -qsmp=omp
+#LDFLAGS_OMP = -qsmp=omp
 
 # MPI compilation options
 #------------------------

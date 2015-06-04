@@ -3,12 +3,14 @@
 #--------------------------------------
 include ../Arch/make.inc
 
+
 SRC=cmpflx.c conservar.c equation_of_state.c hydro_godunov.c main.c parametres.c riemann.c trace.c vtkfile.c compute_deltat.c constoprim.c hydro_funcs.c make_boundary.c qleftright.c slope.c utils.c
 
 OBJ = $(patsubst %.c, %.o, ${SRC})
 
 default: mono
 
+all: mono mpi omp mpiomp
 mono: CCOMP = $(CC)
 mono: CCOMPFLAGS = $(FFLAGS)
 mono: LINKFLAGS = $(LDFLAGS)
