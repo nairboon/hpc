@@ -60,7 +60,7 @@ main(int argc, char **argv)
            " out of %d processors\n",
            processor_name, mpi_node.rank, mpi_node.world_size);
 
-    if( isMaster )
+    if( isMaster() )
         printf("Cheffe\n");
 
 
@@ -172,18 +172,23 @@ main(int argc, char **argv)
          *
          */
 
-        if (time_output == 0) {
-            if ((H.nstep % H.noutput) == 0) {
-                vtkfile(++nvtk, H, &Hv);
-                sprintf(outnum, "%s [%04ld]", outnum, nvtk);
+
+            if (time_output == 0) {
+                if ((H.nstep % H.noutput) == 0) {
+
+                    store_results(++nvtk, H, &Hv);
+                    //vtkfile(++nvtk, H, &Hv);
+                    sprintf(outnum, "%s [%04ld]", outnum, nvtk);
+                }
+            } else {
+                if (H.t >= next_output_time) {
+                    store_results(++nvtk, H, &Hv);
+                    //vtkfile(++nvtk, H, &Hv);
+                    next_output_time = next_output_time + H.dtoutput;
+                    sprintf(outnum, "%s [%04ld]", outnum, nvtk);
+                }
             }
-        } else {
-            if (H.t >= next_output_time) {
-                vtkfile(++nvtk, H, &Hv);
-                next_output_time = next_output_time + H.dtoutput;
-                sprintf(outnum, "%s [%04ld]", outnum, nvtk);
-            }
-        }
+
 
         fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
     }   // end while loop
