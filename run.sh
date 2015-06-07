@@ -10,4 +10,4 @@ cd Output
 #../hcode/Src/hydro_omp -i ../hcode/Input/input_mini
 
 
-mpirun -n 3 ../hcode/Src/hydro_mpi
+mpirun -n 3 ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini

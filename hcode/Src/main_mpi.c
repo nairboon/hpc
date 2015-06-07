@@ -24,13 +24,22 @@ hydrovarwork_t Hvw;             // nvar
 hydrowork_t Hw;
 unsigned long flops = 0;
 
+
+#define MASTER 0
+
 int
 main(int argc, char **argv)
 {
 
 #ifndef MPI
-  printf("Only MPI version \n");
+  printf("Only MPI version !!\n");
 #endif
+
+
+#ifdef MPIOMP
+  printf("MPIOMP\n");
+ #endif
+
 
   printf("MPI\n");
 
@@ -55,16 +64,13 @@ main(int argc, char **argv)
            " out of %d processors\n",
            processor_name, world_rank, world_size);
 
-    if( world_rank == 0)
+    if( world_rank == MASTER)
         printf("Cheffe\n");
 
-    
-    // Finalize the MPI environment.
-    MPI_Finalize();
 
-  #ifdef MPIOMP
-  printf("MPIOMP\n");
- #endif
+
+
+
 
     int nb_th=1;
     double dt = 0;
@@ -80,8 +86,19 @@ main(int argc, char **argv)
 
     start_time = cclock();
     process_args(argc, argv, &H);
+
+
+    long individual_grid_size = H.nx / world_size;
+
+    printf("IGS: %d \n", individual_grid_size);
+    // decompose domain into gridsize/num_processors wide chunks
+    H.nx = individual_grid_size;
     hydro_init(&H, &Hv);
+
+
+    // don't know
     PRINTUOLD(H, &Hv);
+
 
     printf("Hydro starts - sequential version \n");
 
@@ -107,9 +124,6 @@ main(int argc, char **argv)
         }
 
         if ((H.nstep % 2) == 0) {
-
-            //#pragma omp parallel default(shared)
-
             hydro_godunov(1, dt, H, &Hv, &Hw, &Hvw);
             hydro_godunov(2, dt, H, &Hv, &Hw, &Hvw);
 
@@ -152,6 +166,10 @@ main(int argc, char **argv)
     timeToString(outnum, elaps);
 
     fprintf(stdout, "Hydro ends in %ss (%.3lf).\n", outnum, elaps);
+
+
+    // Finalize the MPI environment.
+    MPI_Finalize();
 
     return 0;
 }
