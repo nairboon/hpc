@@ -14,8 +14,9 @@
 #include "utils.h"
 #include "riemann.h"
 
+#ifdef OMP
 #include <omp.h>
-
+#endif
 
 #define DABS(x) (double) fabs((x))
 
