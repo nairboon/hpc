@@ -4,6 +4,8 @@
   (C) Pierre-Francois Lavallee : IDRIS      -- original F90 code
   (C) Guillaume Colin de Verdiere : CEA/DAM -- for the C version
 */
+
+
 #include <stdio.h>
 #include <time.h>
 
@@ -14,9 +16,10 @@
 #include "hydro_godunov.h"
 #include "utils.h"
 
-#ifdef MPI
+
 #include <mpi.h>
-#endif
+
+#include "mpi_helper.h"
 
 hydroparam_t H;
 hydrovar_t Hv;                  // nvar
@@ -25,7 +28,6 @@ hydrowork_t Hw;
 unsigned long flops = 0;
 
 
-#define MASTER 0
 
 int
 main(int argc, char **argv)
@@ -41,18 +43,12 @@ main(int argc, char **argv)
  #endif
 
 
-  printf("MPI\n");
+  printf("MPI %d\n",mpi_node.rank);
 
 
-  MPI_Init(NULL, NULL);
+    init_mpi();
 
-    // Get the number of processes
-    int world_size;
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-    // Get the rank of the process
-    int world_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
     // Get the name of the processor
     char processor_name[MPI_MAX_PROCESSOR_NAME];
@@ -62,9 +58,9 @@ main(int argc, char **argv)
     // Print off a hello world message
     printf("Hello world from processor %s, rank %d"
            " out of %d processors\n",
-           processor_name, world_rank, world_size);
+           processor_name, mpi_node.rank, mpi_node.world_size);
 
-    if( world_rank == MASTER)
+    if( isMaster )
         printf("Cheffe\n");
 
 
@@ -88,11 +84,12 @@ main(int argc, char **argv)
     process_args(argc, argv, &H);
 
 
-    long individual_grid_size = H.nx / world_size;
+    long individual_grid_size = H.nx / mpi_node.world_size;
 
     printf("IGS: %d \n", individual_grid_size);
     // decompose domain into gridsize/num_processors wide chunks
     H.nx = individual_grid_size;
+
     hydro_init(&H, &Hv);
 
 
@@ -110,18 +107,38 @@ main(int argc, char **argv)
         next_output_time = next_output_time + H.dtoutput;
     }
 
+    /* H.tend = max time of the simulation
+     * H.t = sum of timesteps (dt)
+     * */
     while ((H.t < H.tend) && (H.nstep < H.nstepmax))
     {
         start_iter = cclock();
         outnum[0] = 0;
         flops = 0;
+
+
+        /* PART I
+         * Compute dTime
+         * */
         if ((H.nstep % 2) == 0)
         {
+            // Gather all oder so hier
             compute_deltat(&dt, H, &Hw, &Hv, &Hvw);
             if (H.nstep == 0) {
                 dt = dt / 2.0;
             }
+
+            double mindt;
+            MPI_Allreduce(MPI_IN_PLACE, &dt,1,MPI_DOUBLE,MPI_MIN,MPI_COMM_WORLD);
+
+            printf("%f dt of %d\n",dt, mpi_node.rank);
+
         }
+
+        /* PART II
+         * apply godunov
+         *
+         */
 
         if ((H.nstep % 2) == 0) {
             hydro_godunov(1, dt, H, &Hv, &Hw, &Hvw);
@@ -136,6 +153,8 @@ main(int argc, char **argv)
         H.nstep++;
         H.t += dt;
 
+
+
         if (flops > 0) {
             double iter_time = (double) (end_iter - start_iter);
             if (iter_time > 1.e-9) {
@@ -146,6 +165,13 @@ main(int argc, char **argv)
             double iter_time = (double) (end_iter - start_iter);
             sprintf(outnum, "%s (%.3fs)", outnum, iter_time);
         }
+
+
+        /* PART III
+         * gather & write results
+         *
+         */
+
         if (time_output == 0) {
             if ((H.nstep % H.noutput) == 0) {
                 vtkfile(++nvtk, H, &Hv);
@@ -158,6 +184,7 @@ main(int argc, char **argv)
                 sprintf(outnum, "%s [%04ld]", outnum, nvtk);
             }
         }
+
         fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
     }   // end while loop
     hydro_finish(H, &Hv);

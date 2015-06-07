@@ -12,6 +12,9 @@
 
 #include "utils.h"
 #include "hydro_funcs.h"
+
+#include "mpi_helper.h"
+
 void
 hydro_init(hydroparam_t * H, hydrovar_t * Hv)
 {
@@ -51,8 +54,12 @@ hydro_init(hydroparam_t * H, hydrovar_t * Hv)
      printf("PFL %d %d\n", x, y);
      Hv->uold[IHvP(x, y, IP)] = one / H->dx / H->dx;*/
     // point explosion at corner (top,left)
-    Hv->uold[IHvP(H->imin+ExtraLayer, H->jmin+ExtraLayer, IP)] = one / H->dx / H->dx;
-}                               // hydro_init
+
+
+    // only first node on the left = master has explosion
+    if ( isMaster )
+        Hv->uold[IHvP(H->imin+ExtraLayer, H->jmin+ExtraLayer, IP)] = one / H->dx / H->dx;
+}
 
 void
 hydro_finish(const hydroparam_t H, hydrovar_t * Hv)
