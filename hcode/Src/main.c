@@ -104,9 +104,13 @@ main(int argc, char **argv)
 	}
       
       if ((H.nstep % 2) == 0) {
-	hydro_godunov(1, dt, H, &Hv, &Hw, &Hvw);
-	hydro_godunov(2, dt, H, &Hv, &Hw, &Hvw); 
-      } else {
+
+    //#pragma omp parallel default(shared)
+
+              hydro_godunov(1, dt, H, &Hv, &Hw, &Hvw);
+              hydro_godunov(2, dt, H, &Hv, &Hw, &Hvw);
+
+          } else {
 	hydro_godunov(2, dt, H, &Hv, &Hw, &Hvw);
 	hydro_godunov(1, dt, H, &Hv, &Hw, &Hvw); 
       }

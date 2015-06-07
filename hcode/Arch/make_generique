@@ -22,6 +22,7 @@ LDFLAGS = -O4
 # OpenMP compilation options
 #---------------------------
 #CFLAGS_OMP =  -qsmp=omp
+CFLAGS_OMP = -fopenmp
 
 # OpenMP link options
 #--------------------

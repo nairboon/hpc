@@ -14,6 +14,9 @@
 #include "utils.h"
 #include "riemann.h"
 
+#include <omp.h>
+
+
 #define DABS(x) (double) fabs((x))
 
 void
@@ -50,6 +53,7 @@ riemann(double *RESTRICT qleft, double *RESTRICT qright,
     smallpp = Hsmallr * smallp;
     gamma6 = (Hgamma + one) / (two * Hgamma);
     // Pressure, density and velocity
+    #pragma omp parallel for
     for (i = 0; i < nface; i++) {
         rl[i] = MAX(qleft[IHVW(i, ID)], Hsmallr);
         ul[i] = qleft[IHVW(i, IU)];
@@ -72,6 +76,7 @@ riemann(double *RESTRICT qleft, double *RESTRICT qright,
         ind[i] = 1;             // toutes les cellules sont a traiter
 
 	// Newton-Raphson iterations to find pstar at the required accuracy
+    #pragma omp parallel for
 	for (iter = 0; iter < Hniter_riemann; iter++) {
 	  double precision = 1.e-6;
 	  if (ind[i] == 1) {

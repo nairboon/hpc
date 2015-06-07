@@ -122,27 +122,30 @@ hydro_godunov(long idim, double dt, const hydroparam_t H, hydrovar_t * Hv,
 
     if (idim == 1) {
       for (j = H.jmin + ExtraLayer; j < H.jmax - ExtraLayer; j++) {
-	qID = &q[IHvw(0, ID)];
-	qIP = &q[IHvw(0, IP)];
-	
-	gatherConservativeVars(idim, j, uold, u, H.imin, H.imax, H.jmin,
-			       H.jmax, H.nvar, H.nxt, H.nyt, H.nxyt);
-	
-	// Convert to primitive variables
-	constoprim(u, q, e, H.nxt, H.nxyt, H.nvar, H.smallr);
-	
-	equation_of_state(qID, e, qIP, c, 0, H.nxt, H.smallc, H.gamma);
-	
-	Dmemset(dq, 0, (H.nxyt + 2) * H.nvar);
-	
-	// Characteristic tracing
-	if (H.iorder != 1) {
-	  slope(q, dq, H.nxt, H.nvar, H.nxyt, H.slope_type);
-	}
-	trace(q, dq, c, qxm, qxp, dtdx, H.nxt, H.scheme, H.nvar, H.nxyt);
-	
-	qleftright(idim, H.nx, H.ny, H.nxyt, H.nvar, qxm, qxp, qleft, qright);
-	
+          qID = &q[IHvw(0, ID)];
+          qIP = &q[IHvw(0, IP)];
+
+          gatherConservativeVars(idim, j, uold, u, H.imin, H.imax, H.jmin,
+                                 H.jmax, H.nvar, H.nxt, H.nyt, H.nxyt);
+
+          // Convert to primitive variables
+          constoprim(u, q, e, H.nxt, H.nxyt, H.nvar, H.smallr);
+
+          equation_of_state(qID, e, qIP, c, 0, H.nxt, H.smallc, H.gamma);
+
+          Dmemset(dq, 0, (H.nxyt + 2) * H.nvar);
+
+          // Characteristic tracing
+          if (H.iorder != 1) {
+              slope(q, dq, H.nxt, H.nvar, H.nxyt, H.slope_type);
+          }
+
+//#pragma omp parallel default(shared)
+ {
+          trace(q, dq, c, qxm, qxp, dtdx, H.nxt, H.scheme, H.nvar, H.nxyt);
+
+          qleftright(idim, H.nx, H.ny, H.nxyt, H.nvar, qxm, qxp, qleft, qright);
+      }
 	// Solve Riemann problem at interfaces
 	riemann(qleft, qright, qgdnv,
 		rl, ul, pl, cl, wl, rr, ur, pr, cr, wr, ro, uo, po, co, wo,

@@ -28,7 +28,7 @@ omp: CCOMP = $(CC)
 omp: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_OMP)
 omp: LINKFLAGS = $(LDFLAGS) $(LDFLAGS_OMP)
 omp: $(SRC)
-	$(CCOMP) -DOMP $(LINKFLAGS) $(SRC) -o hydro_omp -lm
+	$(CCOMP) -DOMP -fopenmp $(LINKFLAGS) $(SRC) -o hydro_omp -lm
 
 mpiomp: CCOMP = $(MPICC)
 mpiomp: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_MPI) $(FFLAGS_OMP)
