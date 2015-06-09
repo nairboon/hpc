@@ -57,8 +57,10 @@ hydro_init(hydroparam_t * H, hydrovar_t * Hv)
 
 
     // only first node on the left = master has explosion
-    if ( isMaster() )
-        Hv->uold[IHvP(H->imin+ExtraLayer, H->jmin+ExtraLayer, IP)] = one / H->dx / H->dx;
+    if ( isMaster() ) {
+        printf(" Set point explosion\n");
+        Hv->uold[IHvP(H->imin + ExtraLayer, H->jmin + ExtraLayer, IP)] = one / H->dx / H->dx;
+    }
 }
 
 void

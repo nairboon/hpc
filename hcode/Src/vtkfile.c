@@ -13,6 +13,9 @@
 #include "parametres.h"
 #include "utils.h"
 #include "vtkfile.h"
+
+#include "mpi_helper.h"
+
 void
 vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
 {
@@ -54,6 +57,9 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
             sprintf(name, "%s varIP", name);
     }
 
+    long individual_grid_size = H.nx / mpi_node.world_size;
+
+
     // declaration of the variable list
     fprintf(fic, "<CellData Scalars=\"%s\">\n", name);
     name[0] = 0;
@@ -70,10 +76,24 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
         //Definition of the cell values
         fprintf(fic, "<DataArray type=\"Float32\" Name=\"%s\" format=\"ascii\">\n", name);
 
+
+        int offset = H.nvar * H.nxt * H.nyt;
+
         // the image is the interior of the computed domain
         for (j = H.jmin + ExtraLayer; j < H.jmax - ExtraLayer; j++) {
+            int domain = 0; // start with "master domain"
+           int x=0;
             for (i = H.imin + ExtraLayer; i < H.imax - ExtraLayer; i++) {
-                fprintf(fic, "%lf ", Hv->uold[IHv(i, j, nv)]);
+
+                if(x >=individual_grid_size) {
+                    printf("cross domain at %d\n",i); // skipp ghost boxes
+                 x=0;
+                    domain++;
+                    i+=4;
+                }
+                fprintf(fic, "%lf ", Hv->uold[IHv(i + (domain * offset), j, nv)]);
+                //printf("%d %d %d \t %d\n",i,j,nv,x);
+                x++;
             }
             fprintf(fic, "\n");
         }

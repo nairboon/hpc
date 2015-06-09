@@ -131,7 +131,7 @@ main(int argc, char **argv)
             double mindt;
             MPI_Allreduce(MPI_IN_PLACE, &dt,1,MPI_DOUBLE,MPI_MIN,MPI_COMM_WORLD);
 
-            printf("%f dt of %d\n",dt, mpi_node.rank);
+            //printf("%f dt of %d\n",dt, mpi_node.rank);
 
         }
 

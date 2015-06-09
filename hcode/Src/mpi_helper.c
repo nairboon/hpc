@@ -1,8 +1,9 @@
 #include <stdio.h>
 
+
 #include "mpi_helper.h"
 
-
+#include "vtkfile.h"
 mpi_node_t mpi_node;
 
 
@@ -53,7 +54,7 @@ void init_mpi() {
 }
 
 
-void store_results(long step, const hydroparam_t H, hydrovar_t * Hv) {
+void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
 
     /*
      * from H (param_t) we need:
@@ -62,8 +63,10 @@ void store_results(long step, const hydroparam_t H, hydrovar_t * Hv) {
      * actually we don't  -.-, it's the same for all of them
      *
      * from Hv we need: for real
-     *  uold
+     *  uold, size: H->nvar * H->nxt * H->nyt
      */
+
+/*
     sparse_hydroparam shp;
     shp.imin = H.imin;
     shp.imax = H.imax;
@@ -75,17 +78,48 @@ void store_results(long step, const hydroparam_t H, hydrovar_t * Hv) {
     sparse_hydroparam res[mpi_node.world_size];
 
     MPI_Gather(&shp, 1, mpi_sparse_hydroparam, &res, 1, mpi_sparse_hydroparam, 0 ,MPI_COMM_WORLD );
+*/
+
+
+    int n = H.nvar * H.nxt * H.nyt;
+
+    double resHv[n * mpi_node.world_size];
+    MPI_Gather(Hv->uold, n, MPI_DOUBLE, &resHv, n, MPI_DOUBLE, 0 ,MPI_COMM_WORLD );
+
+
 
     if ( isMaster() ) {
 
-        printf(" Master received: \n");
-        for(int i=0;i<mpi_node.world_size;i++)
-            printf(" %d - %d \n", res[i].ny, res[i].nx);
+        //for(int i=0;i<mpi_node.world_size;i++)
+        //    resHv[i]->uold = (double *) calloc(n, sizeof(double));
 
-        vtkfile(step, H, Hv);
+
+
+        //printf(" Master received: \n");
+        //for(int i=0;i<mpi_node.world_size;i++)
+        //    printf(" %d - %d \n", res[i].ny, res[i].nx);
+
+        H.imax = H.imax * mpi_node.world_size;
+
+        printf("Master from  i: %d ->%d\t j: %d ->%d\n", H.imin, H.imax, H.jmin, H.jmax);
+
+        //H.imax = (H.nx * mpi_node.world_size) + ExtraLayerTot; //(H.imax - ExtraLayerTot) * mpi_node.world_size;
+
+
+
+        //printf(" %d", (H.nx * mpi_node.world_size) + ExtraLayerTot );
+        H.nx = H.nx * mpi_node.world_size;
+
+
+        hydrovar_t HvG;
+        HvG.uold = resHv;
+
+        vtkfile(step, H, &HvG);
     } else { // slave
 
-            printf("I %d sent %d, %d\n", mpi_node.rank, shp.imin, shp.imax);
+        printf("Slave from  i: %d ->%d\t j: %d ->%d\n", H.imin, H.imax, H.jmin, H.jmax);
+
+        //printf("I %d sent %d, %d\n", mpi_node.rank, shp.imin, shp.imax);
     }
 
 
