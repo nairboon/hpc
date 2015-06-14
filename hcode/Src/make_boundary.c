@@ -33,7 +33,7 @@ make_boundary(long idim, const hydroparam_t H, hydrovar_t * Hv)
  
     if (idim == 1) {
 
-        if ( isMaster() ) {  // only master needs a left boundry
+        if ( isMaster() ) {  // only master needs a left boundary
 
 
             // Left boundary
@@ -61,31 +61,35 @@ make_boundary(long idim, const hydroparam_t H, hydrovar_t * Hv)
 	fprintf(stderr,"PFL ExtraLayer %d ExtraLayerTot %d\n",ExtraLayer,ExtraLayerTot);
 	fprintf(stderr,"PFL H.jmin %d H.jmax %d\n",H.jmin,H.jmax); */
 
-        // Right boundary
-        for (ivar = 0; ivar < H.nvar; ivar++) {
-            for (i = H.nx + ExtraLayer; i < H.nx + ExtraLayerTot; i++) {
-                sign = 1.0;
-                if (H.boundary_right == 1) {
-                    i0 = 2 * H.nx + ExtraLayerTot - i - 1;
-                    if (ivar == IU) {
-                        sign = -1.0;
-                    }
-                } else if (H.boundary_right == 2) {
-                    i0 = H.nx + ExtraLayer;
-                } else {
-                    i0 = i - H.nx;
-                }
-                for (j = H.jmin + ExtraLayer; j < H.jmax - ExtraLayer; j++) {
-		  /* fprintf(stderr,"PFL %d %d\n",i,j); */ 
-                    Hv->uold[IHv(i, j, ivar)] = Hv->uold[IHv(i0, j, ivar)] * sign;
-		    /*		  fprintf(stderr,"PFL \n"); */
 
-                    MFLOPS(1, 0, 0, 0);
-                }
-            }
-        }
+        // right most node needs right boundary
+     if ( mpi_node.rank == (mpi_node.world_size -1) ) {
 
+         // Right boundary
+         for (ivar = 0; ivar < H.nvar; ivar++) {
+             for (i = H.nx + ExtraLayer; i < H.nx + ExtraLayerTot; i++) {
+                 sign = 1.0;
+                 if (H.boundary_right == 1) {
+                     i0 = 2 * H.nx + ExtraLayerTot - i - 1;
+                     if (ivar == IU) {
+                         sign = -1.0;
+                     }
+                 } else if (H.boundary_right == 2) {
+                     i0 = H.nx + ExtraLayer;
+                 } else {
+                     i0 = i - H.nx;
+                 }
+                 for (j = H.jmin + ExtraLayer; j < H.jmax - ExtraLayer; j++) {
+                     /* fprintf(stderr,"PFL %d %d\n",i,j); */
+                     Hv->uold[IHv(i, j, ivar)] = Hv->uold[IHv(i0, j, ivar)] * sign;
+                     /*		  fprintf(stderr,"PFL \n"); */
 
+                     MFLOPS(1, 0, 0, 0);
+                 }
+             }
+         }
+
+     }
     } else {
 
         // Lower boundary

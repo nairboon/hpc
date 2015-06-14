@@ -175,18 +175,23 @@ void _share_ghost_receive(hydroparam_t H, hydrovar_t * Hv,int var, int target,do
 void share_right(hydroparam_t H, hydrovar_t * Hv) {
 
 
-    MPI_Request requests[8];
-    MPI_Status statuses[8];
+    MPI_Request requests_recv[4];
+
+    MPI_Request requests_send[4];
+
+    MPI_Status statuses[4];
+
+
 
     double* results[4];
 
     for(int v=0;v<H.nvar;v++) {
 
-        _share_ghost_send(H, Hv, v, H.nx, mpi_node.rank+1,&requests[v]);
+        _share_ghost_send(H, Hv, v, H.nx, mpi_node.rank+1,&requests_send[v]);
 
         results[v] = malloc(H.jmax*2 * sizeof(double));
 
-        _share_ghost_receive(H, Hv, v, mpi_node.rank+1, results[v], &requests[v+4]);
+        _share_ghost_receive(H, Hv, v, mpi_node.rank+1, results[v], &requests_recv[v]);
 
 
     }
@@ -215,8 +220,34 @@ void share_right(hydroparam_t H, hydrovar_t * Hv) {
 
     printf("Big wait...\n");
 
+    MPI_Waitall(4,requests_send,statuses);
 
-    MPI_Waitall(8,requests,statuses);
+
+
+    for(int v=0;v<H.nvar;v++) {
+        MPI_Status status;
+        int count;
+
+        printf("waiting for %d...\t",v);
+
+        MPI_Wait (&requests_recv[v], &status);
+        MPI_Get_count (&status, MPI_DOUBLE, &count);
+
+        printf("done: %d\n",count);
+
+
+
+        for(int j=0;j<H.jmax;j++) {
+
+
+            Hv->uold[IHv(H.nx + ExtraLayer, j, v)] = results[v][j*2];
+            Hv->uold[IHv(H.nx + ExtraLayer + 1, j, v)] = results[v][(j*2)+1];
+
+//            j++;
+        }
+
+
+    }
 
 
     printf("Updated my right side\n");
@@ -287,12 +318,10 @@ void share_left(hydroparam_t H, hydrovar_t * Hv) {
 
         for(int j=0;j<H.jmax;j++) {
 
-            Hv->uold[IHv(0, j, v)] = results[v][j];
-            Hv->uold[IHv(1, j, v)] = results[v][j+1];
+            Hv->uold[IHv(0, j, v)] = results[v][j*2];
+            Hv->uold[IHv(1, j, v)] = results[v][(j*2)+1];
 
-            // printf("%f %f\n", r[j], r[j+1]);
-
-            j++;
+            //j++;
         }
 
 
