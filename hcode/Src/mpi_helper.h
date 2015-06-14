@@ -10,7 +10,7 @@ typedef struct mpi_node_t {
     int rank;
     int world_size;
 
-
+    int individual_grid_size;
 }mpi_node_t;
 
 
@@ -25,6 +25,9 @@ void init_mpi();
 
 
 void store_results(long step, const hydroparam_t H, hydrovar_t * Hv);
+
+
+void share_ghost_cells();
 
 #else // non mpi code
 

@@ -4,7 +4,7 @@
 include ../Arch/make.inc
 
 
-SRC=cmpflx.c conservar.c equation_of_state.c hydro_godunov.c parametres.c riemann.c trace.c vtkfile.c compute_deltat.c constoprim.c hydro_funcs.c make_boundary.c qleftright.c slope.c utils.c
+SRC=cmpflx.c conservar.c equation_of_state.c hydro_godunov.c parametres.c riemann.c trace.c vtkfile.c compute_deltat.c constoprim.c hydro_funcs.c make_boundary.c qleftright.c slope.c utils.c mpi_helper.c
 
 OBJ = $(patsubst %.c, %.o, ${SRC})
 
@@ -22,7 +22,7 @@ mpi: CCOMP = $(MPICC)
 mpi: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_MPI)
 mpi: LINKFLAGS = $(LDFLAGS) $(LDFLAGS_MPI)
 mpi: $(SRC)
-	$(CCOMP) -DMPI -std=c11 $(LINKFLAGS) $(SRC) main_mpi.c mpi_helper.c -o hydro_mpi -lm
+	$(CCOMP) -DMPI -std=c11 $(LINKFLAGS) $(SRC) main_mpi.c -o hydro_mpi -lm
 
 omp: CCOMP = $(CC)
 omp: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_OMP)
@@ -34,7 +34,7 @@ mpiomp: CCOMP = $(MPICC)
 mpiomp: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_MPI) $(FFLAGS_OMP)
 mpiomp: LINKFLAGS = $(LDFLAGS) $(LDFLAGS_MPI) $(LDFLAGS_OMP)
 mpiomp: $(OBJ)
-	$(CCOMP) -DMPI -DOMP $(LINKFLAGS) $(OBJ) main_mpi.c mpi_helper.c -o hydro_mpiomp -lm
+	$(CCOMP) -DMPI -DOMP $(LINKFLAGS) $(OBJ) main_mpi.c -o hydro_mpiomp -lm
 
 
 clean   :

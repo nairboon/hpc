@@ -86,7 +86,7 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
             for (i = H.imin + ExtraLayer; i < H.imax - ExtraLayer; i++) {
 
                 if(x >=individual_grid_size) {
-                    printf("cross domain at %d\n",i); // skipp ghost boxes
+                    //printf("cross domain at %d\n",i); // skipp ghost boxes
                  x=0;
                     domain++;
                     i+=4;

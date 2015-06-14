@@ -84,11 +84,11 @@ main(int argc, char **argv)
     process_args(argc, argv, &H);
 
 
-    long individual_grid_size = H.nx / mpi_node.world_size;
+    mpi_node.individual_grid_size = H.nx / mpi_node.world_size;
 
-    printf("IGS: %d \n", individual_grid_size);
+    printf("IGS: %d \n", mpi_node.individual_grid_size);
     // decompose domain into gridsize/num_processors wide chunks
-    H.nx = individual_grid_size;
+    H.nx = mpi_node.individual_grid_size;
 
     hydro_init(&H, &Hv);
 
@@ -140,6 +140,8 @@ main(int argc, char **argv)
          *
          */
 
+
+
         if ((H.nstep % 2) == 0) {
             hydro_godunov(1, dt, H, &Hv, &Hw, &Hvw);
             hydro_godunov(2, dt, H, &Hv, &Hw, &Hvw);
@@ -148,6 +150,9 @@ main(int argc, char **argv)
             hydro_godunov(2, dt, H, &Hv, &Hw, &Hvw);
             hydro_godunov(1, dt, H, &Hv, &Hw, &Hvw);
         }
+
+        share_ghost_cells(H,&Hv);
+
 
         end_iter = cclock();
         H.nstep++;
@@ -171,7 +176,7 @@ main(int argc, char **argv)
          * gather & write results
          *
          */
-
+        MPI_Barrier(MPI_COMM_WORLD);
 
             if (time_output == 0) {
                 if ((H.nstep % H.noutput) == 0) {
