@@ -46,7 +46,7 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
     fprintf(fic, "</DataArray>\n");
     fprintf(fic, "</Points>\n");
     name[0] = 0;
-    for (nv = 0; nv < IP; nv++) {
+    for (nv = 0; nv <= IP; nv++) {
         if (nv == ID)
             sprintf(name, "%s varID", name);
         if (nv == IU)
@@ -83,16 +83,19 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
         for (j = H.jmin + ExtraLayer; j < H.jmax - ExtraLayer; j++) {
             int domain = 0; // start with "master domain"
            int x=0;
-            for (i = H.imin + ExtraLayer; i < H.imax - ExtraLayer; i++) {
+            for (i = H.imin + ExtraLayer; i < H.imax - ExtraLayer - 2; i++) {
 
-                if(x >=individual_grid_size) {
-                    //printf("cross domain at %d\n",i); // skipp ghost boxes
+                if(x >= (individual_grid_size + 2) ) {
+                   // printf("cross domain over gc at %d\n",i); // skipp ghost boxes
                  x=0;
                     domain++;
-                    i+=4;
+                    i+=2;
                 }
                 fprintf(fic, "%lf ", Hv->uold[IHv(i + (domain * offset), j, nv)]);
-                //printf("%d %d %d \t %d\n",i,j,nv,x);
+
+                //printf("%d %d %d d:%d\t %f\n",i,j,nv,domain,Hv->uold[IHv(i + (domain * offset ), j, nv)]);
+
+
                 x++;
             }
             fprintf(fic, "\n");
