@@ -16,6 +16,8 @@
 
 #include "mpi_helper.h"
 
+#include <assert.h>
+
 void
 vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
 {
@@ -33,13 +35,13 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
     fprintf(fic, "<?xml version=\"1.0\"?>\n");
     fprintf(fic, "<VTKFile type=\"StructuredGrid\">\n");
     fprintf(fic, "<StructuredGrid WholeExtent=\" %ld %ld %ld %ld %ld %ld\">\n", (long)0,
-            H.nx, (long)0, H.ny, (long)0, (long)0);
-    fprintf(fic, "<Piece Extent=\" %ld %ld %ld %ld %ld %ld\">\n", (long)0, H.nx, (long)0, H.ny, (long)0, (long)0);
+            mpi_node.global_grid_size, (long)0, H.ny, (long)0, (long)0);
+    fprintf(fic, "<Piece Extent=\" %ld %ld %ld %ld %ld %ld\">\n", (long)0, mpi_node.global_grid_size, (long)0, H.ny, (long)0, (long)0);
     fprintf(fic, "<Points>\n");
     fprintf(fic,
             "<DataArray type=\"Float32\" format=\"ascii\" NumberOfComponents=\"3\">\n");
     for (j = 0; j < H.ny + 1; j++) {
-        for (i = 0; i < H.nx + 1; i++) {
+        for (i = 0; i < mpi_node.global_grid_size + 1; i++) {
             fprintf(fic, "%f %f %f\n", i * H.dx, j * H.dx, 0.0);
         }
     }
@@ -57,7 +59,6 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
             sprintf(name, "%s varIP", name);
     }
 
-    long individual_grid_size = H.nx / mpi_node.world_size;
 
 
     // declaration of the variable list
@@ -79,24 +80,61 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
 
         int offset = H.nvar * H.nxt * H.nyt;
 
+        printf("offset: %ld %ld - %ld\n", H.nxt, H.nyt, H.ny);
+
+
         // the image is the interior of the computed domain
         for (j = H.jmin + ExtraLayer; j < H.jmax - ExtraLayer; j++) {
+
+
             int domain = 0; // start with "master domain"
            int x=0;
-            for (i = H.imin + ExtraLayer; i < H.imax - ExtraLayer - 2; i++) {
 
-                if(x >= (individual_grid_size + 2) ) {
-                   // printf("cross domain over gc at %d\n",i); // skipp ghost boxes
+            int total =0;
+
+            for (i = H.imin + ExtraLayer; i < H.imax - ExtraLayer+1; i++) {
+
+                if( (i - ExtraLayer) >= (mpi_node.individual_grid_size) ) {
+                    //printf("cross domain over gc at %d\n",i); // skipp ghost boxes
                  x=0;
                     domain++;
-                    i+=2;
+                    i = H.imin + ExtraLayer;
+
+                    if (total >= mpi_node.global_grid_size)
+                        break;
                 }
-                fprintf(fic, "%lf ", Hv->uold[IHv(i + (domain * offset), j, nv)]);
+                long id = IHv(i , j, nv)  + (domain * offset);
 
-                //printf("%d %d %d d:%d\t %f\n",i,j,nv,domain,Hv->uold[IHv(i + (domain * offset ), j, nv)]);
+                //printf("acc: %d\n",id);
+                //printf("%d %d d:%d\t %f\n",i,j,domain,Hv->uold[IHv(i , j, nv)  + (domain * offset)]);
+
+                if( domain >= mpi_node.world_size) {
+
+                    printf("ghmmmmmm");
+                    fflush(stdout);
+                }
+                assert(domain < mpi_node.world_size);
+                fprintf(fic, "%lf ", Hv->uold[IHv(i , j, nv)  + (domain * offset)]);
 
 
+
+
+
+
+
+
+                /*{
+
+                    printf("check: %d - %d  [i:%d, e:%d, d:%d]\n", check, mpi_node.global_grid_size, i, H.imax - ExtraLayer, domain);
+
+                    fflush(stdout);
+    fflush(fic);
+                    //
+                }*/
+                assert(total <= mpi_node.global_grid_size);
                 x++;
+                total++;
+
             }
             fprintf(fic, "\n");
         }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include <stddef.h>
 
 #include "mpi_helper.h"
 
@@ -80,12 +81,15 @@ void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
 
     MPI_Gather(&shp, 1, mpi_sparse_hydroparam, &res, 1, mpi_sparse_hydroparam, 0 ,MPI_COMM_WORLD );
 */
-
+    MPI_Barrier(MPI_COMM_WORLD);
 
     int n = H.nvar * H.nxt * H.nyt;
 
     double resHv[n * mpi_node.world_size];
+
     MPI_Gather(Hv->uold, n, MPI_DOUBLE, &resHv, n, MPI_DOUBLE, 0 ,MPI_COMM_WORLD );
+
+
 
 
 
@@ -93,7 +97,7 @@ void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
 
 
 
-        H.imax = H.imax * mpi_node.world_size;
+        // H.imax = H.imax * mpi_node.world_size;
 
         printf("Master from  i: %d ->%d\t j: %d ->%d\n", H.imin, H.imax, H.jmin, H.jmax);
 
@@ -102,7 +106,7 @@ void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
 
 
         //printf(" %d", (H.nx * mpi_node.world_size) + ExtraLayerTot );
-        H.nx = H.nx * mpi_node.world_size;
+       // H.nx = H.nx * mpi_node.world_size;
 
 
         hydrovar_t HvG;
@@ -131,13 +135,13 @@ void _share_ghost_send(hydroparam_t H, hydrovar_t * Hv,int var, int xstart, int 
         r[i++] = Hv->uold[IHv(xstart + 1, j, var)];
     }
 
-    if (var == 0 || var == IP) {
+/*    if (var == 0 || var == IP) {
         printf("Var: %d\n", var);
         for (int j = 0; j < H.jmax * 2; j++) {
             printf("%f %f \n", r[j], r[j + 1]);
             j++;
         }
-    }
+    }*/
 
 
 

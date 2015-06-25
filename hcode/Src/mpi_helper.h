@@ -1,7 +1,7 @@
 
 #ifdef MPI
 
-#include <mpi.h>
+#include <mpich/mpi.h>
 #include "parametres.h"
 
 
@@ -11,6 +11,9 @@ typedef struct mpi_node_t {
     int world_size;
 
     int individual_grid_size;
+
+    long global_grid_size;
+
 }mpi_node_t;
 
 

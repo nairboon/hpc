@@ -17,7 +17,7 @@
 #include "utils.h"
 
 
-#include <mpi.h>
+#include <mpich/mpi.h>
 
 #include "mpi_helper.h"
 
@@ -83,6 +83,7 @@ main(int argc, char **argv)
     start_time = cclock();
     process_args(argc, argv, &H);
 
+    mpi_node.global_grid_size = H.nx;
 
     mpi_node.individual_grid_size = H.nx / mpi_node.world_size;
 
@@ -183,7 +184,7 @@ main(int argc, char **argv)
          * gather & write results
          *
          */
-        MPI_Barrier(MPI_COMM_WORLD);
+
 
             if (time_output == 0) {
                 if ((H.nstep % H.noutput) == 0) {
