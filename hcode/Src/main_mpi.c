@@ -177,17 +177,18 @@ main(int argc, char **argv)
         H.t += dt;
 
 
-
-        if (flops > 0) {
+/*
+        if (flops > 0 && -1) {
             double iter_time = (double) (end_iter - start_iter);
             if (iter_time > 1.e-9) {
                 double mflops = (double) flops / (double) 1.e+6 / iter_time;
-                sprintf(outnum, "%s {%.3f Mflops} (%.3fs)", outnum, mflops, iter_time);
+                sprintf(outnum, "%s {%.3f Mflops} %.3fs", outnum, mflops, iter_time);
             }
-        } else {
+        } else {*/
+
             double iter_time = (double) (end_iter - start_iter);
-            sprintf(outnum, "%s (%.3fs)", outnum, iter_time);
-        }
+            sprintf(outnum, "%s %.3fs hahaha", outnum, iter_time);
+       // }
 
 
         /* PART III
@@ -214,9 +215,9 @@ main(int argc, char **argv)
 
 
         //fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
-        fprintf(stdout, "--> step=%-4ld %f, %f %s\n", H.nstep, H.t, dt, outnum);
+        fprintf(stdout, "--> step=%-4ld %f, %f %f %s\n", H.nstep, H.t, dt, iter_time, outnum);
         if( isMaster() )
-            fprintf(log, "--> step=%-4ld %f, %f %s\n", H.nstep, H.t, dt, outnum);
+            fprintf(log, "--> step=%-4ld %f, %f %f %s\n", H.nstep, H.t, dt, iter_time, outnum);
 
 
     }   // end while loop
