@@ -13,7 +13,10 @@
 #include "utils.h"
 #include "hydro_funcs.h"
 
+#ifdef MPI
 #include "mpi_helper.h"
+#endif
+
 
 void
 hydro_init(hydroparam_t * H, hydrovar_t * Hv)
@@ -56,11 +59,17 @@ hydro_init(hydroparam_t * H, hydrovar_t * Hv)
     // point explosion at corner (top,left)
 
 
+#ifdef MPI
     // only first node on the left = master has explosion
     if ( isMaster() ) {
         printf(" Set point explosion\n");
         Hv->uold[IHvP(H->imin + ExtraLayer, H->jmin + ExtraLayer, IP)] = one / H->dx / H->dx;
     }
+    #else
+
+         Hv->uold[IHvP(x, y, IP)] = one / H->dx / H->dx;
+
+    #endif
 }
 
 void

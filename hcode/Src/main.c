@@ -9,7 +9,7 @@
 
 #include "parametres.h"
 #include "hydro_funcs.h"
-#include "vtkfile_mpi.h"
+#include "vtkfile.h"
 #include "compute_deltat.h"
 #include "hydro_godunov.h"
 #include "utils.h"

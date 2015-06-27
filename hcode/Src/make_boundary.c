@@ -14,7 +14,9 @@
 #include "make_boundary.h"
 #include "utils.h"
 
+#ifdef MPI
 #include "mpi_helper.h"
+#endif
 
 
 void
@@ -33,8 +35,9 @@ make_boundary(long idim, const hydroparam_t H, hydrovar_t * Hv)
  
     if (idim == 1) {
 
+#ifdef MPI
         if ( isMaster() ) {  // only master needs a left boundary
-
+#endif
 
             // Left boundary
             for (ivar = 0; ivar < H.nvar; ivar++) {
@@ -56,15 +59,18 @@ make_boundary(long idim, const hydroparam_t H, hydrovar_t * Hv)
                     }
                 }
             }
+#ifdef MPI
         }
+        #endif
 	/* fprintf(stderr,"PFL H.nvar %d H.nx %d\n",H.nvar,H.nx);
 	fprintf(stderr,"PFL ExtraLayer %d ExtraLayerTot %d\n",ExtraLayer,ExtraLayerTot);
 	fprintf(stderr,"PFL H.jmin %d H.jmax %d\n",H.jmin,H.jmax); */
 
 
+#ifdef MPI
         // right most node needs right boundary
      if ( mpi_node.rank == (mpi_node.world_size -1) ) {
-
+#endif
          // Right boundary
          for (ivar = 0; ivar < H.nvar; ivar++) {
              for (i = H.nx + ExtraLayer; i < H.nx + ExtraLayerTot; i++) {
@@ -88,8 +94,11 @@ make_boundary(long idim, const hydroparam_t H, hydrovar_t * Hv)
                  }
              }
          }
-
+#ifdef MPI
      }
+
+    #endif
+
     } else {
 
         // Lower boundary

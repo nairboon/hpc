@@ -16,7 +16,7 @@ mono: CCOMP = $(CC)
 mono: CCOMPFLAGS = $(FFLAGS)
 mono: LINKFLAGS = $(LDFLAGS)
 mono: $(SRC)
-	$(CCOMP) -DMONO $(LINKFLAGS) $(SRC) main.c -o hydro_mono -lm
+	$(CCOMP) -DMONO $(LINKFLAGS) $(SRC) vtkfile.c main.c -o hydro_mono -lm
 
 mpi: CCOMP = $(MPICC)
 mpi: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_MPI)
