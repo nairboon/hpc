@@ -56,10 +56,10 @@ echo "running with $1"
       ## on dora
       if [ $1 -eq "1" ]
          then
-            aprun -N 1 -n 1 time  "$current/../hcode/Src/hydro_mono" -i "$current/../hcode/Input/input_scenario_$2_$3"
+            aprun -n 1 time  "$current/../hcode/Src/hydro_mono" -i "$current/../hcode/Input/input_scenario_$2_$3"
          else
 
-        aprun -N $1 -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
+        aprun -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
 
     fi
 
