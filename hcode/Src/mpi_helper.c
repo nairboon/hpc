@@ -4,7 +4,7 @@
 
 #include "mpi_helper.h"
 
-#include "vtkfile.h"
+#include "vtkfile_mpi.h"
 mpi_node_t mpi_node;
 
 #define VARIDOFFSET 42
@@ -99,7 +99,7 @@ void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
 
         // H.imax = H.imax * mpi_node.world_size;
 
-        printf("Master from  i: %d ->%d\t j: %d ->%d\n", H.imin, H.imax, H.jmin, H.jmax);
+       // printf("Master from  i: %d ->%d\t j: %d ->%d\n", H.imin, H.imax, H.jmin, H.jmax);
 
         //H.imax = (H.nx * mpi_node.world_size) + ExtraLayerTot; //(H.imax - ExtraLayerTot) * mpi_node.world_size;
 
@@ -115,7 +115,7 @@ void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
         vtkfile(step, H, &HvG);
     } else { // slave
 
-        printf("Slave %d sent from  i: %d ->%d\t j: %d ->%d\n", mpi_node.rank, H.imin, H.imax, H.jmin, H.jmax);
+       // printf("Slave %d sent from  i: %d ->%d\t j: %d ->%d\n", mpi_node.rank, H.imin, H.imax, H.jmin, H.jmax);
 
         //printf("I %d sent %d, %d\n", mpi_node.rank, shp.imin, shp.imax);
     }
@@ -228,7 +228,7 @@ void share_right(hydroparam_t H, hydrovar_t * Hv) {
     }
 
 
-    printf("Updated my right side\n");
+   // printf("Updated my right side\n");
 }
 
 
@@ -288,7 +288,7 @@ void share_left(hydroparam_t H, hydrovar_t * Hv) {
         free(results[v]);
         free(sb[v]);
     }
-        printf("Updated my left side\n");
+       // printf("Updated my left side\n");
 
 }
 
@@ -297,18 +297,18 @@ void share_ghost_cells(hydroparam_t H, hydrovar_t * Hv) {
 
     if ( isMaster() ) { // only share right side
 
-        printf("I'm master, share right\n");
+       // printf("I'm master, share right\n");
 
         share_right(H,Hv);
 
     } else if ( mpi_node.rank == (mpi_node.world_size -1) ) {
 
-        printf("I'm right end, share left\n");
+        //printf("I'm right end, share left\n");
 
         share_left(H,Hv);
 
     } else { //share left & right
-        printf("I'm in the middle...\n");
+       // printf("I'm in the middle...\n");
 
         share_left(H,Hv);
         share_right(H,Hv);

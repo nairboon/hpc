@@ -8,10 +8,10 @@
 
 #include <stdio.h>
 #include <time.h>
-
+#include <stdlib.h>
 #include "parametres.h"
 #include "hydro_funcs.h"
-#include "vtkfile.h"
+#include "vtkfile_mpi.h"
 #include "compute_deltat.h"
 #include "hydro_godunov.h"
 #include "utils.h"
@@ -60,8 +60,18 @@ main(int argc, char **argv)
            " out of %d processors\n",
            processor_name, mpi_node.rank, mpi_node.world_size);
 
-    if( isMaster() )
+    FILE *log;
+
+    if( isMaster() ) {
         printf("Cheffe\n");
+
+        log = fopen("times.log", "w");
+        if (log == NULL) {
+            fprintf(stderr, "Ouverture du fichier log impossible\n");
+            exit(1);
+        }
+
+    }
 
 
 
@@ -132,7 +142,7 @@ main(int argc, char **argv)
             double mindt;
             MPI_Allreduce(MPI_IN_PLACE, &dt,1,MPI_DOUBLE,MPI_MIN,MPI_COMM_WORLD);
 
-            printf("%f dt of %d\n",dt, mpi_node.rank);
+            //printf("%f dt of %d\n",dt, mpi_node.rank);
 
         }
 
@@ -203,7 +213,12 @@ main(int argc, char **argv)
             }
 
 
-        fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
+        //fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
+        fprintf(stdout, "--> step=%-4ld %f, %f %s\n", H.nstep, H.t, dt, outnum);
+        if( isMaster() )
+            fprintf(log, "--> step=%-4ld %f, %f %s\n", H.nstep, H.t, dt, outnum);
+
+
     }   // end while loop
     hydro_finish(H, &Hv);
     end_time = cclock();

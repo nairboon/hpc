@@ -12,7 +12,7 @@
 
 #include "parametres.h"
 #include "utils.h"
-#include "vtkfile.h"
+#include "vtkfile_mpi.h"
 
 #include "mpi_helper.h"
 
@@ -34,14 +34,30 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
     }
     fprintf(fic, "<?xml version=\"1.0\"?>\n");
     fprintf(fic, "<VTKFile type=\"StructuredGrid\">\n");
+
+#ifdef MPI
     fprintf(fic, "<StructuredGrid WholeExtent=\" %ld %ld %ld %ld %ld %ld\">\n", (long)0,
             mpi_node.global_grid_size, (long)0, H.ny, (long)0, (long)0);
     fprintf(fic, "<Piece Extent=\" %ld %ld %ld %ld %ld %ld\">\n", (long)0, mpi_node.global_grid_size, (long)0, H.ny, (long)0, (long)0);
+    #else
+
+fprintf(fic, "<StructuredGrid WholeExtent=\" %ld %ld %ld %ld %ld %ld\">\n", (long)0,
+            H.nx, (long)0, H.ny, (long)0, (long)0);
+    fprintf(fic, "<Piece Extent=\" %ld %ld %ld %ld %ld %ld\">\n", (long)0, H.nx, (long)0, H.ny, (long)0, (long)0);
+
+   #endif
+
+
     fprintf(fic, "<Points>\n");
     fprintf(fic,
             "<DataArray type=\"Float32\" format=\"ascii\" NumberOfComponents=\"3\">\n");
     for (j = 0; j < H.ny + 1; j++) {
+#ifdef MPI
         for (i = 0; i < mpi_node.global_grid_size + 1; i++) {
+            #else
+                    for (i = 0; i < H.nx + 1; i++) {
+
+            #endif
             fprintf(fic, "%f %f %f\n", i * H.dx, j * H.dx, 0.0);
         }
     }
@@ -80,7 +96,7 @@ vtkfile(long step, const hydroparam_t H, hydrovar_t * Hv)
 
         int offset = H.nvar * H.nxt * H.nyt;
 
-        printf("offset: %ld %ld - %ld\n", H.nxt, H.nyt, H.ny);
+       // printf("offset: %ld %ld - %ld\n", H.nxt, H.nyt, H.ny);
 
 
         // the image is the interior of the computed domain
