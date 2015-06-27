@@ -2,10 +2,10 @@
 
 #SBATCH --partition=bigmem
 #SBATCH --job-name="hello_world_mpi"
-#SBATCH --time=00:05:00
-#SBATCH --nodes=2
+#SBATCH --time=00:00:30
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=2
-#SBATCH --output=hello_world_mpi.%j..out
+#SBATCH --output=hello_world_mpi.%j.out
 #SBATCH --error=hello_world_mpi.%j.err
 
 cd Output
@@ -27,7 +27,7 @@ cd Output
 
 if [ "$1" == "--cray" ]; then
     ## on dora
-aprun -B time ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
+aprun -B time -n 2 ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
 
 
  else
