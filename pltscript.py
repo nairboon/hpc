@@ -1,23 +1,19 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Jun 27 11:34:40 2015
 
-@author: stephan
-"""
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-import os,time
-
 import os
+
+
+
 
 def sorted_ls(path):
     mtime = lambda f: os.stat(os.path.join(path, f)).st_mtime
-    return list(sorted(os.listdir(path), key=mtime,reverse=True))
+    dirs = [ name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name)) ]
+    return list(sorted( dirs, key=mtime,reverse=True))
 
-recent = sorted_ls('Experiment')[0]
+
 
     
 def load_all(keys):
@@ -32,14 +28,20 @@ def load_all(keys):
 
 
 
-masterarray = [1,2,3,4,5,6,8]
-
-
 def plot_all(ba):
     for key in ba:
         plt.plot(ba[key], label=key)
     plt.legend()
     plt.show()
+    
+
+recent = sorted_ls('Experiment')[0]
+
+
+masterarray = [1,2,3,4,5,6,8]
+
+
+
 
 ba = load_all(masterarray)
 
