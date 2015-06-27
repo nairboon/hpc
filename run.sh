@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#SBATCH --partition=bigmem
 #SBATCH --job-name="hello_world_mpi"
 #SBATCH --time=00:00:30
 #SBATCH --nodes=1
