@@ -187,7 +187,6 @@ main(int argc, char **argv)
         } else {*/
 
             double iter_time = (double) (end_iter - start_iter);
-            sprintf(outnum, "%s %.3fs hahaha", outnum, iter_time);
        // }
 
 
@@ -217,7 +216,7 @@ main(int argc, char **argv)
         //fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
         fprintf(stdout, "--> step=%-4ld %f, %f %f %s\n", H.nstep, H.t, dt, iter_time, outnum);
         if( isMaster() )
-            fprintf(log, "--> step=%-4ld %f, %f %f %s\n", H.nstep, H.t, dt, iter_time, outnum);
+            fprintf(log, "%ld, %f, %f, %f, %s\n", H.nstep, H.t, dt, iter_time, outnum);
 
 
     }   // end while loop
