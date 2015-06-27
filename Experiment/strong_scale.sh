@@ -42,7 +42,7 @@ else
 
   if [ "$flag" == "--cray" ]; then
       ## on dora
-  aprun -N $1 -n $1 time ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
+  aprun -N $1 -n $1 time ../../../hcode/Src/hydro_mpi -i ../../../hcode/Input/input_scenario_$2_$3
 
 
    else
