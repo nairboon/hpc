@@ -32,7 +32,7 @@ def load_all(keys):
 
 
 
-masterarray = [2,3,4,5,6,8]
+masterarray = [1,2,3,4,5,6,8]
 
 
 def plot_all(ba):
@@ -44,12 +44,12 @@ def plot_all(ba):
 ba = load_all(masterarray)
 
 #print ba[]
-list = []
+mlist = []
 for i in masterarray:
-    list.append(np.mean(ba[i]))
+    mlist.append(np.mean(ba[i]))
     
 
-plt.plot(list)    
+plt.plot(mlist)    
 plt.show()
 
 plot_all(ba)
