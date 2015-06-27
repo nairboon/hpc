@@ -42,19 +42,43 @@ def plot_all(ba):
 
 dirlist = sorted_ls('Experiment')
 
+fig = plt.figure()
+    
 allsc = []
+
+scenarios = {}
+pi = 0
 for ex in dirlist:
+    s = ex.split("_")[0]
     arr, key = load_all(ex)
     allsc.append(arr)
     means = []
+
+    if not scenarios.has_key(s):
+        scenarios[s] = fig.add_subplot(3,1,pi)
+        scenarios[s].set_yscale('log')
+
+        pi+=1
+        
     for i in key:
         means.append(np.mean(arr[i]))
-        
-    plt.plot(key,means,marker='o', label=ex)
+    
+    #scenarios[s].append(key,means,ex)    
+    #p = fig.add_subplot(211)    
+    scenarios[s].plot(key,means,marker='o', label=ex)
+    scenarios[s].legend()
     print key,means
 
-plt.legend()
-plt.show()
+#
+#for i, s in enumerate(scenarios):
+#    p = fig.add_subplot(i+1,1,1)
+#    key,means,ex = scenarios[s]    
+#    p.plot(key,means,marker='o', label=ex)
+
+
+
+
+fig.show()
 
 #plt.waitforbuttonpress()
 
