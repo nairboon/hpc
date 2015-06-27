@@ -2,3 +2,6 @@ Output/*
 *.o
 *.xcodeproj
 *.DS_Store
+
+
+hcode/Arch/make.inc

@@ -19,10 +19,10 @@ mono: $(SRC)
 	$(CCOMP) -DMONO $(LINKFLAGS) $(SRC) vtkfile.c main.c -o hydro_mono -lm
 
 mpi: CCOMP = $(MPICC)
-mpi: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_MPI)
+mpi: CCOMPFLAGS = $(FFLAGS) $(CFLAGS_MPI)
 mpi: LINKFLAGS = $(LDFLAGS) $(LDFLAGS_MPI)
 mpi: $(SRC)
-	$(CCOMP) -DMPI -std=c11 $(LINKFLAGS) $(SRC)  vtkfile_mpi.c mpi_helper.c main_mpi.c -o hydro_mpi -lm
+	$(CCOMP) $(CCOMPFLAGS) -DMPI $(LINKFLAGS) $(SRC)  vtkfile_mpi.c mpi_helper.c main_mpi.c -o hydro_mpi -lm
 
 omp: CCOMP = $(CC)
 omp: CCOMPFLAGS = $(FFLAGS) $(FFLAGS_OMP)

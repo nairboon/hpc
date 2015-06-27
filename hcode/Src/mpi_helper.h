@@ -1,7 +1,7 @@
 
 #ifdef MPI
 
-#include <mpich/mpi.h>
+#include <mpi.h>
 #include "parametres.h"
 
 
