@@ -27,7 +27,7 @@ cd Output
 
 if [ "$1" == "--cray" ]; then
     ## on dora
-aprun -B time -n 2 ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
+aprun -B -n 2 time ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
 
 
  else
