@@ -9,14 +9,41 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-data = np.loadtxt('/home/stephan/Documents/hpc1bproject/hpc/Experiment/2015-06-27-12-51-23/2/times.log',delimiter=",",usecols=(2,3))
+import os,time
 
-print(data[:,1])
+import os
+
+def sorted_ls(path):
+    mtime = lambda f: os.stat(os.path.join(path, f)).st_mtime
+    return list(sorted(os.listdir(path), key=mtime,reverse=True))
+
+recent = sorted_ls('Experiment')[0]
+
+    
+def load_all(keys):
+    bigarr = {}
+    for k in keys:
+        data = np.loadtxt('Experiment/%s/%s/times.log' % (recent,k),delimiter=",",usecols=(2,3))
+        #print k,data        
+        bigarr[k] = ( data[:,1])
+        
+        
+    return bigarr
 
 
-X = np.linspace(0,2*np.pi,100)
-Y=np.sin(X)
 
-plt.plot(data[:,1])
+
+
+
+def plot_all(ba):
+    for key in ba:
+        plt.plot(ba[key], label=key)
+    plt.legend()
+    plt.show()
+
+ba = load_all([2,3,4,5,6,8])
+
+#print ba
+plot_all(ba)
 
 
