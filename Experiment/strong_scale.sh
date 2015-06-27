@@ -2,7 +2,7 @@
 
 
 #SBATCH --job-name="hello_world_mpi_strong"
-#SBATCH --time=00:01:00
+#SBATCH --time=00:05:00
 #SBATCH --nodes=1
 #SBATCH --output=hello_world_mpi-s.%j.out
 #SBATCH --error=hello_world_mpi-s.%j.err
