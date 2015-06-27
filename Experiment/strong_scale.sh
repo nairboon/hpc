@@ -34,20 +34,32 @@ version=""
 
 echo "running wiht $1"
 
-if [ $1 -eq "1" ]
-then
-     ../../../hcode/Src/hydro_mono -i "$current/../hcode/Input/input_scenario_$2_$3"
-else
+
 
 
   if [ "$flag" == "--cray" ]; then
       ## on dora
-  aprun -N $1 -n $1 time ../../../hcode/Src/hydro_mpi -i ../../../hcode/Input/input_scenario_$2_$3
+
+      if [ $1 -eq "1" ]
+         then
+            aprun -N $1 -n $1 time  ../../../hcode/Src/hydro_mono -i "$current/../hcode/Input/input_scenario_$2_$3"
+         else
+
+        aprun -N $1 -n $1 time ../../../hcode/Src/hydro_mpi -i ../../../hcode/Input/input_scenario_$2_$3
+
+    fi
+
 
 
    else
-     mpirun -n $1 ../../../hcode/Src/hydro_mpi -i ../../../hcode/Input/input_scenario_$2_$3
-fi
+
+   if [ $1 -eq "1" ]
+   then
+        ../../../hcode/Src/hydro_mono -i "$current/../hcode/Input/input_scenario_$2_$3"
+   else
+
+        mpirun -n $1 ../../../hcode/Src/hydro_mpi -i ../../../hcode/Input/input_scenario_$2_$3
+    fi
 
 fi
 
