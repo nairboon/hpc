@@ -17,8 +17,6 @@
 #include "utils.h"
 
 
-#include <mpich/mpi.h>
-
 #include "mpi_helper.h"
 
 hydroparam_t H;

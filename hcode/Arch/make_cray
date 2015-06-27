@@ -1,11 +1,23 @@
-MPICC = mpicc
+MPICC = cc
 CC = gcc
 
 
 
+# Fortran compiler
+#-----------------
+F90 = xlf_r
+
+# MPI-Fortran compiler
+#---------------------
+MPIF90 = mpxlf90_r
+
+# Fortran compilation options
+#-----------------------------
+FFLAGS =
+
 # Linker options
 #---------------
-LDFLAGS = -O4 
+LDFLAGS =
 
 # OpenMP compilation options
 #---------------------------
@@ -18,7 +30,7 @@ CFLAGS_OMP = -fopenmp
 
 # MPI compilation options
 #------------------------
-CFLAGS_MPI = -std=c11
+CFLAGS_MPI =
 
 # MPI link options
 #-----------------
