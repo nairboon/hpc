@@ -67,7 +67,7 @@ hydro_init(hydroparam_t * H, hydrovar_t * Hv)
     }
     #else
 
-         Hv->uold[IHvP(x, y, IP)] = one / H->dx / H->dx;
+    Hv->uold[IHvP(H->imin + ExtraLayer, H->jmin + ExtraLayer, IP)] = one / H->dx / H->dx;
 
     #endif
 }
