@@ -27,7 +27,7 @@ fi
 
 
 big="1 2 3 4 5 6 8 10 12 16 20 24 30 40 48"
-small="1 2 3 4 5 6 8"
+small="1 2 3 4 6 8 12"
 
 echo "$os $scenario $variant $size"
 
