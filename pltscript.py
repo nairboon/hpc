@@ -16,15 +16,20 @@ def sorted_ls(path):
 
 
     
-def load_all(keys):
+def load_all(run):
+    path = 'Experiment/%s' % run
+    recent = sorted_ls(path)[0]
+    path = "%s/%s" % (path,recent)
+    keys = map(int,sorted_ls(path))
+    
     bigarr = {}
     for k in keys:
-        data = np.loadtxt('Experiment/%s/%s/times.log' % (recent,k),delimiter=",",usecols=(2,3))
+        data = np.loadtxt('%s/%s/times.log' % (path,k),delimiter=",",usecols=(2,3))
         #print k,data        
         bigarr[k] = ( data[:,1])
         
         
-    return bigarr
+    return (bigarr,sorted(keys))
 
 
 
@@ -32,28 +37,46 @@ def plot_all(ba):
     for key in ba:
         plt.plot(ba[key], label=key)
     plt.legend()
-    plt.show()
+    
     
 
-recent = sorted_ls('Experiment')[0]
+dirlist = sorted_ls('Experiment')
 
+allsc = []
+for ex in dirlist:
+    arr, key = load_all(ex)
+    allsc.append(arr)
+    means = []
+    for i in key:
+        means.append(np.mean(arr[i]))
+        
+    plt.plot(key,means,marker='o', label=ex)
+    print key,means
 
-masterarray = [1,2,3,4,5,6,8]
-
-
-
-
-ba = load_all(masterarray)
-
-#print ba[]
-mlist = []
-for i in masterarray:
-    mlist.append(np.mean(ba[i]))
-    
-
-plt.plot(mlist)    
+plt.legend()
 plt.show()
 
-plot_all(ba)
+#plt.waitforbuttonpress()
 
+
+
+
+
+
+#
+#
+##print ba[]
+#mlist = []
+#for i in masterarray:
+#    mlist.append(np.mean(ba[i]))
+#    
+#
+#plt.plot(masterarray,mlist,marker='o')    
+#plt.show()
+#
+#plt.waitforbuttonpress()
+
+#plot_all(ba)
+
+plt.show()
 
