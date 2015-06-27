@@ -87,7 +87,7 @@ process_input(char *datafile, hydroparam_t * H)
     char *pval, *pkey;
     fd = fopen(datafile, "r");
     if (fd == NULL) {
-        fprintf(stderr, "Fichier de donnees illisible\n");
+        fprintf(stderr, "Fichier de donnees illisible: %s\n", datafile);
         exit(1);
     }
     while (fgets(buffer, 1024, fd) == buffer) {

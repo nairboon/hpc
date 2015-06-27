@@ -6,8 +6,13 @@ dts() { date +%Y-%m-%d-%H-%M-%S; }
 
 d="$(dts)"
 
+current=$(pwd)
+
+
 mkdir $d
 cd $d
+
+
 
 
 run() {
@@ -21,18 +26,16 @@ echo "running wiht $1"
 
 if [ $1 -eq "1" ]
 then
-  version="mono"
+     ../../../hcode/Src/hydro_mono -i "$current/../hcode/Input/input_scenario_$2_$3"
 else
-  version="mpi"
+  mpirun -n $1 ../../../hcode/Src/hydro_mpi -i ../../../hcode/Input/input_scenario_$2_$3
 fi
 
-
-mpirun -n $1 ../../../hcode/Src/hydro_$version -i ../../../hcode/Input/input_scenario_$2_$3
 cd ..
 }
 
 
-#run 1 A seq
+run 1 A sq
 
 run 2 A sq
 run 3 A sq

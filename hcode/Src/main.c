@@ -51,6 +51,21 @@ main(int argc, char **argv)
   
   printf("Hydro starts - sequential version \n");
 
+
+    FILE *log;
+
+
+        printf("Cheffe\n");
+
+        log = fopen("times.log", "w");
+        if (log == NULL) {
+            fprintf(stderr, "Ouverture du fichier log impossible\n");
+            exit(1);
+        }
+
+
+
+
   // vtkfile(nvtk, H, &Hv);
   if (H.dtoutput > 0) 
     {	
@@ -111,6 +126,10 @@ main(int argc, char **argv)
 	}
       }
 	fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
+        double iter_time = (double) (end_iter - start_iter);
+
+        fprintf(log, "%ld, %f, %f, %f, %s\n", H.nstep, H.t, dt, iter_time, outnum);
+
     }   // end while loop
   hydro_finish(H, &Hv);
   end_time = cclock();

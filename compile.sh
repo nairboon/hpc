@@ -10,5 +10,5 @@ fi
 
 cd  hcode/Src
 
-#make mono
+make mono
 make mpi
