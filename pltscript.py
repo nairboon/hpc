@@ -51,7 +51,7 @@ pi = 0
 
 scenario_D = []
 scenario_T2 = []
-
+scenario_T12 = []
 for ex in dirlist:
     s = ex.split("_")[0]
     arr, key = load_all(ex)
@@ -84,6 +84,14 @@ for ex in dirlist:
         tp = m/(x)
         print x, tp
         scenario_T2.append( (x,tp ))
+    elif s == "T12":
+        var = ex.split("_")[1]
+        dim = var.split("x")
+        m = means[0]
+        x=int(dim[0])/24
+        tp = m/(x)
+        print x, tp
+        scenario_T12.append( (x,tp ))
     else:
         scenarios[s].plot(key,means,marker='o', label=ex)
         scenarios[s].legend()
@@ -105,6 +113,12 @@ print "Min time is at: ", min(sd,key=itemgetter(1))
 scenarios["T2"].set_yscale('linear')
 scenarios["T2"].plot(x,y,marker='o', label=ex)
 
+sd =sorted(scenario_T12, key=itemgetter(0))
+x,y = zip(*sd)
+
+print "Min time is at: ", min(sd,key=itemgetter(1))
+scenarios["T12"].set_yscale('linear')
+scenarios["T12"].plot(x,y,marker='o', label=ex)
 #
 #for i, s in enumerate(scenarios):
 #    p = fig.add_subplot(i+1,1,1)
