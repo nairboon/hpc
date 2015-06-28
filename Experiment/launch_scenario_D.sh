@@ -23,3 +23,9 @@ sbatch -A uzh8 strong_scale.sh --cray D 1152x32 scd
 sbatch -A uzh8 strong_scale.sh --cray D 1536x24 scd
 sbatch -A uzh8 strong_scale.sh --cray D 2304x16 scd
 sbatch -A uzh8 strong_scale.sh --cray D 3072x12 scd
+
+sbatch -A uzh8 strong_scale.sh --cray D 4608x8 scd
+sbatch -A uzh8 strong_scale.sh --cray D 6144x6 scd
+sbatch -A uzh8 strong_scale.sh --cray D 9216x4 scd
+sbatch -A uzh8 strong_scale.sh --cray D 18432x2 scd
+sbatch -A uzh8 strong_scale.sh --cray D 36864x1 scd
