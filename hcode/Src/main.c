@@ -6,6 +6,7 @@
 */
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 #include "parametres.h"
 #include "hydro_funcs.h"

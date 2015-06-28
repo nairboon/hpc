@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include <stddef.h>
+#include <malloc.h>
 
 #include "mpi_helper.h"
 
@@ -25,32 +26,6 @@ void init_mpi() {
 
     // Get the rank of the process
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_node.rank);
-
-
-    /*
-     *  Our types
-     */
-
-
-
-
-
-
-    MPI_Datatype types[] = {MPI_LONG,MPI_LONG,MPI_LONG,MPI_LONG,MPI_LONG,MPI_LONG};
-    int          blocklengths[] = {1,1,1,1,1,1};
-    MPI_Aint     offsets[6];
-
-    offsets[0] = offsetof(sparse_hydroparam, imin);
-    offsets[1] = offsetof(sparse_hydroparam, imax);
-    offsets[2] = offsetof(sparse_hydroparam, jmin);
-    offsets[3] = offsetof(sparse_hydroparam, jmax);
-    offsets[4] = offsetof(sparse_hydroparam, nx);
-    offsets[5] = offsetof(sparse_hydroparam, ny);
-
-
-    MPI_Type_create_struct(6, blocklengths, offsets, types, &mpi_sparse_hydroparam);
-    MPI_Type_commit(&mpi_sparse_hydroparam);
-
 
 
 }
@@ -182,12 +157,13 @@ void share_right(hydroparam_t H, hydrovar_t * Hv) {
 
 
     double* results[4];
+    double *sb[4];
 
     for(int v=0;v<H.nvar;v++) {
 
-        double *sb = malloc(H.jmax*2 *sizeof(double));
+        sb[v] = malloc(H.jmax*2 *sizeof(double));
 
-        _share_ghost_send(H, Hv, v, H.nx, mpi_node.rank+1,&requests_send[v],sb);
+        _share_ghost_send(H, Hv, v, H.nx, mpi_node.rank+1,&requests_send[v],sb[v]);
 
         results[v] = malloc(H.jmax*2 * sizeof(double));
 
@@ -224,6 +200,9 @@ void share_right(hydroparam_t H, hydrovar_t * Hv) {
 
 //            j++;
         }
+
+        free(results[v]);
+        free(sb[v]);
 
     }
 
