@@ -4,7 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-
+from ggplot import *
 
 
 
@@ -50,7 +50,8 @@ scenarios = {}
 pi = 0
 
 scenario_D = []
-scenario_D_y = []
+scenario_T2 = []
+
 for ex in dirlist:
     s = ex.split("_")[0]
     arr, key = load_all(ex)
@@ -58,7 +59,7 @@ for ex in dirlist:
     means = []
 
     if not scenarios.has_key(s):
-        scenarios[s] = fig.add_subplot(4,1,pi)
+        scenarios[s] = fig.add_subplot(5,1,pi)
         scenarios[s].set_yscale('log')
 
         pi+=1
@@ -72,8 +73,17 @@ for ex in dirlist:
     if s == "D":
         var = ex.split("_")[1]
         dim = var.split("x")
+        
         scenario_D.append( (int(dim[0]), means[0]))
         #scenario_D_y.append(means[0])
+    elif s == "T2":
+        var = ex.split("_")[1]
+        dim = var.split("x")
+        m = means[0]
+        x=int(dim[0])/2
+        tp = m/(x)
+        print x, tp
+        scenario_T2.append( (x,tp ))
     else:
         scenarios[s].plot(key,means,marker='o', label=ex)
         scenarios[s].legend()
@@ -87,6 +97,14 @@ x,y = zip(*sd)
 print "Min time is at: ", min(sd,key=itemgetter(1))
 
 scenarios["D"].plot(x,y,marker='o', label=ex)
+
+sd =sorted(scenario_T2, key=itemgetter(0))
+x,y = zip(*sd)
+
+print "Min time is at: ", min(sd,key=itemgetter(1))
+scenarios["T2"].set_yscale('linear')
+scenarios["T2"].plot(x,y,marker='o', label=ex)
+
 #
 #for i, s in enumerate(scenarios):
 #    p = fig.add_subplot(i+1,1,1)
