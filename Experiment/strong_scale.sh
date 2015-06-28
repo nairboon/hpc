@@ -30,6 +30,8 @@ small="1 2 3 4 6 8 12"
 
 huge="1 2 4 8 16 24 48 96 192"
 
+scd="12"
+
 #small="1 2 3 4 6"
 
 echo "$os $scenario $variant $size"
@@ -101,6 +103,8 @@ if [ "$size" == "b" ]; then
     run_experiment "$big"
 elif [ "$size" == "h" ]; then
     run_experiment "$huge"
+elif [ "$size" == "scd" ]; then
+    run_experiment "$scd"
 else
     run_experiment "$small"
 fi
