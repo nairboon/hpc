@@ -48,6 +48,9 @@ allsc = []
 
 scenarios = {}
 pi = 0
+
+scenario_D = []
+scenario_D_y = []
 for ex in dirlist:
     s = ex.split("_")[0]
     arr, key = load_all(ex)
@@ -60,15 +63,28 @@ for ex in dirlist:
 
         pi+=1
         
+    
     for i in key:
         means.append(np.mean(arr[i]))
     
     #scenarios[s].append(key,means,ex)    
     #p = fig.add_subplot(211)    
-    scenarios[s].plot(key,means,marker='o', label=ex)
-    scenarios[s].legend()
-    print key,means
+    if s == "D":
+        var = ex.split("_")[1]
+        dim = var.split("x")
+        scenario_D.append( (int(dim[0]), means[0]))
+        #scenario_D_y.append(means[0])
+    else:
+        scenarios[s].plot(key,means,marker='o', label=ex)
+        scenarios[s].legend()
+    #print key,means
 
+from operator import itemgetter
+
+sd =sorted(scenario_D, key=itemgetter(0))
+x,y = zip(*sd)
+
+scenarios["D"].plot(x,y,marker='o', label=ex)
 #
 #for i, s in enumerate(scenarios):
 #    p = fig.add_subplot(i+1,1,1)

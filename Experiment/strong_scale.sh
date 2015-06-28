@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-#SBATCH --job-name="hello_world_mpi_strong"
 #SBATCH --time=00:15:00
 #SBATCH --nodes=6
 #SBATCH --ntasks-per-core=1
