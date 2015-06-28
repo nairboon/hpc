@@ -10,4 +10,4 @@
 
 
 
-sbatch -A uzh8 strong_scale.sh --cray E A custom 50
+sbatch -A uzh8 strong_scale.sh --cray E a custom 50
