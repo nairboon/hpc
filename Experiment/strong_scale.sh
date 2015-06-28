@@ -2,8 +2,8 @@
 
 
 #SBATCH --job-name="hello_world_mpi_strong"
-#SBATCH --time=00:05:00
-#SBATCH --nodes=2
+#SBATCH --time=00:09:00
+#SBATCH --nodes=8
 #SBATCH --ntasks-per-core=1
 #SBATCH --output=hello_world_mpi-s.%j.out
 #SBATCH --error=hello_world_mpi-s.%j.err
@@ -30,6 +30,9 @@ fi
 
 big="1 2 3 4 6 8 10 12 16 20 24 30 40 48"
 small="1 2 3 4 6 8 12"
+
+huge="1 2 4 8 16 24 48 96 192"
+
 #small="1 2 3 4 6"
 
 echo "$os $scenario $variant $size"
@@ -99,6 +102,8 @@ done
 
 if [ "$size" == "b" ]; then
     run_experiment "$big"
+elif [ "$size" == "h" ]; then
+    run_experiment "$huge"
 else
     run_experiment "$small"
 fi
