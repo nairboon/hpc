@@ -1,7 +1,7 @@
 This namelist contains various input parameters for HYDRO runs
 
 &RUN
-nstepmax=100
+nstepmax=50
 tend=2.0
 noutput=100
 on_output=.false.
@@ -9,7 +9,7 @@ on_output=.false.
 
 &MESH
 nx=7680
-ny=96
+ny=1000
 dx=0.01
 boundary_left=1
 boundary_right=1
