@@ -7,7 +7,9 @@
 #SBATCH --output=hello_world_mpi-s.%j.out
 #SBATCH --error=hello_world_mpi-s.%j.err
 
-
+sbatch -A uzh8 strong_scale.sh --cray T2 100x1000 custom 2
+sbatch -A uzh8 strong_scale.sh --cray T2 200x1000 custom 2
+sbatch -A uzh8 strong_scale.sh --cray T2 300x1000 custom 2
 sbatch -A uzh8 strong_scale.sh --cray T2 400x1000 custom 2
 sbatch -A uzh8 strong_scale.sh --cray T2 700x1000 custom 2
 sbatch -A uzh8 strong_scale.sh --cray T2 800x1000 custom 2
