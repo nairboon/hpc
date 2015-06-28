@@ -119,7 +119,7 @@ fprintf(fic, "<StructuredGrid WholeExtent=\" %ld %ld %ld %ld %ld %ld\">\n", (lon
                     if (total >= mpi_node.global_grid_size)
                         break;
                 }
-                long id = IHv(i , j, nv)  + (domain * offset);
+                //long id = IHv(i , j, nv)  + (domain * offset);
 
                 //printf("acc: %d\n",id);
                 //printf("%d %d d:%d\t %f\n",i,j,domain,Hv->uold[IHv(i , j, nv)  + (domain * offset)]);

@@ -72,11 +72,6 @@ main(int argc, char **argv)
     }
 
 
-
-
-
-
-    int nb_th=1;
     double dt = 0;
     long nvtk = 0;
     char outnum[80];
@@ -139,11 +134,7 @@ main(int argc, char **argv)
                 dt = dt / 2.0;
             }
 
-            double mindt;
             MPI_Allreduce(MPI_IN_PLACE, &dt,1,MPI_DOUBLE,MPI_MIN,MPI_COMM_WORLD);
-
-            //printf("%f dt of %d\n",dt, mpi_node.rank);
-
         }
 
         /* PART II

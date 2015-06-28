@@ -18,7 +18,7 @@ typedef struct sparse_hydroparam_t {
 
 double *resHv;
 
-double* results[4];
+double *results[4];
 double *sb[4];
 
 
@@ -41,7 +41,7 @@ void post_hydro_init(const hydroparam_t H) {
     if ( isMaster() ) {
         int n = H.nvar * H.nxt * H.nyt;
 
-        resHv = malloc(n * mpi_node.world_size *sizeof(double));
+        resHv = malloc(n * mpi_node.world_size * sizeof(double));
     }
 
     for(int v=0;v<H.nvar;v++) {
@@ -76,9 +76,9 @@ void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
 
     int n = H.nvar * H.nxt * H.nyt;
 
-    double resHv[n * mpi_node.world_size];
+    //double resHv[n * mpi_node.world_size];
 
-    MPI_Gather(Hv->uold, n, MPI_DOUBLE, &resHv, n, MPI_DOUBLE, 0 ,MPI_COMM_WORLD );
+    MPI_Gather(Hv->uold, n, MPI_DOUBLE, resHv, n, MPI_DOUBLE, 0 ,MPI_COMM_WORLD );
 
 
     if ( isMaster() ) {
@@ -113,10 +113,6 @@ void _share_ghost_send(hydroparam_t H, hydrovar_t * Hv,int var, int xstart, int 
 
 void _share_ghost_receive(hydroparam_t H, hydrovar_t * Hv,int var, int target,double *r, MPI_Request *request) {
 
-
-    MPI_Status status;
-    int count;
-
     MPI_Irecv (r, H.jmax*2, MPI_DOUBLE, target, var + VARIDOFFSET, MPI_COMM_WORLD,
                request);
 
@@ -141,7 +137,6 @@ void share_right(hydroparam_t H, hydrovar_t * Hv) {
    // printf("Big wait...\n");
 
     MPI_Waitall(4,requests_send,statuses);
-
 
 
     for(int v=0;v<H.nvar;v++) {
