@@ -23,7 +23,9 @@ size=$4
 custom=$5
 
 
-big="8 10 12 16 20 24 30 40 48 64 128 256 384 512 8 6 3 2 1"
+#big="8 10 12 16 20 24 30 40 48 64 128 256 384 512 8 6 3 2 1"
+
+big="8 24 64 128"
 
 small="1 2 3 4 6 8 12"
 
@@ -33,7 +35,7 @@ scd="12"
 
 #small="1 2 3 4 6"
 
-echo "$os $scenario $variant $size"
+echo "$os $scenario $variant $size $custom"
 
 d="${scenario}_${variant}_${size}/$(dts)"
 
