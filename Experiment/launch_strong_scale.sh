@@ -8,7 +8,7 @@
 
 
 
-sbatch --nodes=22 -A uzh8 strong_scale.sh --cray A 22 b
-sbatch --nodes=32 -A uzh8 strong_scale.sh --cray A 32 b
-sbatch --nodes=64 -A uzh8 strong_scale.sh --cray A 64 b
-sbatch --nodes=96 -A uzh8 strong_scale.sh --cray A 96 b
+sbatch --nodes=24 --ntasks-per-node=24 -A uzh8 strong_scale.sh --cray A 24 b
+sbatch --nodes=32 --ntasks-per-node=16 -A uzh8 strong_scale.sh --cray A 32 b
+sbatch --nodes=64 --ntasks-per-node=8 -A uzh8 strong_scale.sh --cray A 64 b
+sbatch --nodes=96 --ntasks-per-node=6 -A uzh8 strong_scale.sh --cray A 96 b
