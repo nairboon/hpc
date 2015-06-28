@@ -30,7 +30,7 @@ CFLAGS_OMP = -fopenmp
 
 # MPI compilation options
 #------------------------
-CFLAGS_MPI = -std=c99 -O4
+CFLAGS_MPI = -std=c99 -O3
 
 # MPI link options
 #-----------------
