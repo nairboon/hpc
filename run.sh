@@ -20,7 +20,6 @@ cd Output
 
 #LD_PRELOAD=/usr/lib/debug/usr/lib/valgrind/libmpiwrap-amd64-linux.so
 
-#mpirun -n 2 valgrind --leak-check=full --show-leak-kinds=all -v ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
 
 
 
@@ -37,7 +36,10 @@ if [ "$1" == "--mono" ]; then
  ../hcode/Src/hydro_mono -i ../hcode/Input/input_mini
 
 else
-mpirun -n 2 ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
+#mpirun -n 2 ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
+#mpiexec -l -disable-auto-cleanup -n 2 valgrind ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
+mpiexec -l -disable-auto-cleanup -n 2 time ../hcode/Src/hydro_mpi -i ../hcode/Input/input_mini
+
 fi
 
 fi

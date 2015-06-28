@@ -13,10 +13,10 @@ default: mono
 all: mono mpi omp mpiomp
 
 mono: CCOMP = $(CC)
-mono: CCOMPFLAGS = $(FFLAGS)
+mono: CCOMPFLAGS = -DMONO
 mono: LINKFLAGS = $(LDFLAGS)
-mono: $(SRC)
-	$(CCOMP) -DMONO $(LINKFLAGS) $(SRC) vtkfile.c main.c -o hydro_mono -lm
+mono:
+	$(CCOMP) $(CCOMPFLAGS)  $(LINKFLAGS) $(SRC) vtkfile.c main.c -o hydro_mono -lm
 
 mpi: CCOMP = $(MPICC)
 mpi: CCOMPFLAGS = $(FFLAGS) $(CFLAGS_MPI)
