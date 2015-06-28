@@ -59,7 +59,7 @@ for ex in dirlist:
 
     if not scenarios.has_key(s):
         scenarios[s] = fig.add_subplot(4,1,pi)
-        #scenarios[s].set_yscale('log')
+        scenarios[s].set_yscale('log')
 
         pi+=1
         
