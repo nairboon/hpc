@@ -25,7 +25,7 @@ extern mpi_node_t mpi_node;
 
 
 void init_mpi();
-
+void post_hydro_init(const hydroparam_t H);
 
 void store_results(long step, const hydroparam_t H, hydrovar_t * Hv);
 

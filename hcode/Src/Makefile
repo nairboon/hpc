@@ -13,7 +13,7 @@ default: mono
 all: mono mpi omp mpiomp
 
 mono: CCOMP = $(CC)
-mono: CCOMPFLAGS = -DMONO
+mono: CCOMPFLAGS = -DMONO -O4
 mono: LINKFLAGS = $(LDFLAGS)
 mono:
 	$(CCOMP) $(CCOMPFLAGS)  $(LINKFLAGS) $(SRC) vtkfile.c main.c -o hydro_mono -lm

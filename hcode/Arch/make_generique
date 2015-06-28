@@ -18,16 +18,8 @@ CFLAGS_OMP = -fopenmp
 
 # MPI compilation options
 #------------------------
-CFLAGS_MPI = -std=c11
+CFLAGS_MPI = -std=c11 -O4
 
 # MPI link options
 #-----------------
 LDFLAGS_MPI =
-
-# GPU compilation options
-#------------------------
-CFLAGS_GPU =
-
-# GPU link options
-#-----------------
-LDFLAGS_GPU =

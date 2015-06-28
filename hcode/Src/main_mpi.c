@@ -102,6 +102,8 @@ main(int argc, char **argv)
     hydro_init(&H, &Hv);
 
 
+    post_hydro_init(H);
+
     // don't know
     PRINTUOLD(H, &Hv);
 
