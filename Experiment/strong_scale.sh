@@ -2,8 +2,7 @@
 
 
 #SBATCH --time=00:15:00
-#SBATCH --nodes=8
-#SBATCH --ntasks-per-core=1
+
 #SBATCH --output=hello_world_mpi-s.%j.out
 #SBATCH --error=hello_world_mpi-s.%j.err
 
@@ -24,7 +23,8 @@ size=$4
 custom=$5
 
 
-big="1 2 3 4 6 8 10 12 16 20 24 30 40 48"
+big="1 2 3 4 6 8 10 12 16 20 24 30 40 48 64 128 256 384 512"
+
 small="1 2 3 4 6 8 12"
 
 huge="1 2 4 8 16 24 48 96 192"
