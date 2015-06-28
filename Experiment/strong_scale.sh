@@ -2,7 +2,7 @@
 
 
 #SBATCH --job-name="hello_world_mpi_strong"
-#SBATCH --time=00:09:00
+#SBATCH --time=00:15:00
 #SBATCH --nodes=8
 #SBATCH --ntasks-per-core=1
 #SBATCH --output=hello_world_mpi-s.%j.out
@@ -23,9 +23,6 @@ scenario=$2
 variant=$3
 size=$4
 
-if [ "$size" != "b" ]; then
-    size="s"
-fi
 
 
 big="1 2 3 4 6 8 10 12 16 20 24 30 40 48"
