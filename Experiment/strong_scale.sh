@@ -21,7 +21,7 @@ os=$1
 scenario=$2
 variant=$3
 size=$4
-
+custom=$5
 
 
 big="1 2 3 4 6 8 10 12 16 20 24 30 40 48"
@@ -104,6 +104,8 @@ elif [ "$size" == "h" ]; then
     run_experiment "$huge"
 elif [ "$size" == "scd" ]; then
     run_experiment "$scd"
+elif [ "$size" == "custom" ]; then
+    run_experiment "$custom"
 else
     run_experiment "$small"
 fi
