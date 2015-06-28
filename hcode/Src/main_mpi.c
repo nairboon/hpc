@@ -228,6 +228,8 @@ main(int argc, char **argv)
     fprintf(stdout, "Hydro ends in %ss (%.3lf).\n", outnum, elaps);
 
 
+    my_cleanup(H);
+
     // Finalize the MPI environment.
     MPI_Finalize();
 

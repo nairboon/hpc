@@ -18,6 +18,10 @@ typedef struct sparse_hydroparam_t {
 
 double *resHv;
 
+double* results[4];
+double *sb[4];
+
+
 void init_mpi(hydroparam_t H) {
 
     MPI_Init(NULL, NULL);
@@ -30,8 +34,6 @@ void init_mpi(hydroparam_t H) {
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_node.rank);
 
 
-
-
 }
 
 void post_hydro_init(const hydroparam_t H) {
@@ -40,6 +42,20 @@ void post_hydro_init(const hydroparam_t H) {
         int n = H.nvar * H.nxt * H.nyt;
 
         resHv = malloc(n * mpi_node.world_size *sizeof(double));
+    }
+
+    for(int v=0;v<H.nvar;v++) {
+
+        sb[v] = malloc(H.jmax * 2 * sizeof(double));
+        results[v] = malloc(H.jmax * 2 * sizeof(double));
+    }
+
+}
+
+void my_cleanup(const hydroparam_t H) {
+    for(int v=0;v<H.nvar;v++) {
+        free(results[v]);
+         free(sb[v]);
     }
 }
 
@@ -60,7 +76,7 @@ void store_results(long step, hydroparam_t H, hydrovar_t * Hv) {
 
     int n = H.nvar * H.nxt * H.nyt;
 
-
+    double resHv[n * mpi_node.world_size];
 
     MPI_Gather(Hv->uold, n, MPI_DOUBLE, &resHv, n, MPI_DOUBLE, 0 ,MPI_COMM_WORLD );
 
@@ -89,15 +105,6 @@ void _share_ghost_send(hydroparam_t H, hydrovar_t * Hv,int var, int xstart, int 
         r[i++] = Hv->uold[IHv(xstart + 1, j, var)];
     }
 
-/*    if (var == 0 || var == IP) {
-        printf("Var: %d\n", var);
-        for (int j = 0; j < H.jmax * 2; j++) {
-            printf("%f %f \n", r[j], r[j + 1]);
-            j++;
-        }
-    }*/
-
-
 
     MPI_Isend (r, H.jmax*2, MPI_DOUBLE,
                target, var + VARIDOFFSET, MPI_COMM_WORLD, request); // 42== VARNAME TAG OFFSET
@@ -113,19 +120,9 @@ void _share_ghost_receive(hydroparam_t H, hydrovar_t * Hv,int var, int target,do
     MPI_Irecv (r, H.jmax*2, MPI_DOUBLE, target, var + VARIDOFFSET, MPI_COMM_WORLD,
                request);
 
-    //MPI_Wait (request, &status);
-    //MPI_Get_count (&status, MPI_DOUBLE, &count);
-
-    /*printf("REcevied\n");
-    for(int j=0;j<count;j++) {
-        printf("%f %f \n", r[j],r[j+1]);
-        j++;
-    }*/
-
 }
 
 void share_right(hydroparam_t H, hydrovar_t * Hv) {
-
 
     MPI_Request requests_recv[4];
 
@@ -134,21 +131,9 @@ void share_right(hydroparam_t H, hydrovar_t * Hv) {
     MPI_Status statuses[4];
 
 
-
-    double* results[4];
-    double *sb[4];
-
-    for(int v=0;v<H.nvar;v++) {
-
-        sb[v] = malloc(H.jmax*2 *sizeof(double));
-
-        _share_ghost_send(H, Hv, v, H.nx, mpi_node.rank+1,&requests_send[v],sb[v]);
-
-        results[v] = malloc(H.jmax*2 * sizeof(double));
-
-        _share_ghost_receive(H, Hv, v, mpi_node.rank+1, results[v], &requests_recv[v]);
-
-
+    for (int v = 0; v < H.nvar; v++) {
+        _share_ghost_send(H, Hv, v, H.nx, mpi_node.rank + 1, &requests_send[v], sb[v]);
+        _share_ghost_receive(H, Hv, v, mpi_node.rank + 1, results[v], &requests_recv[v]);
     }
 
 
@@ -180,8 +165,7 @@ void share_right(hydroparam_t H, hydrovar_t * Hv) {
 //            j++;
         }
 
-        free(results[v]);
-        free(sb[v]);
+
 
     }
 
@@ -200,13 +184,9 @@ void share_left(hydroparam_t H, hydrovar_t * Hv) {
 
     MPI_Status statuses[4];
 
-    double* results[4];
-    double *sb[4];
 
     for(int v=0;v<H.nvar;v++) {
-        sb[v] = malloc(H.jmax*2 *sizeof(double));
 
-        results[v] = malloc(H.jmax*2 * sizeof(double));
 
         _share_ghost_receive(H, Hv, v, mpi_node.rank-1, results[v], &requests_recv[v]);
 
@@ -243,8 +223,7 @@ void share_left(hydroparam_t H, hydrovar_t * Hv) {
             //j++;
         }
 
-        free(results[v]);
-        free(sb[v]);
+
     }
        // printf("Updated my left side\n");
 
