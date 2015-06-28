@@ -84,6 +84,8 @@ from operator import itemgetter
 sd =sorted(scenario_D, key=itemgetter(0))
 x,y = zip(*sd)
 
+print "Min time is at: ", min(sd,key=itemgetter(1))
+
 scenarios["D"].plot(x,y,marker='o', label=ex)
 #
 #for i, s in enumerate(scenarios):
