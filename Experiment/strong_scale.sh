@@ -23,7 +23,7 @@ size=$4
 custom=$5
 
 
-big="1 2 3 4 6 8 10 12 16 20 24 30 40 48 64 128 256 384 512"
+big="8 10 12 16 20 24 30 40 48 64 128 256 384 512 8 6 3 2 1"
 
 small="1 2 3 4 6 8 12"
 
@@ -60,8 +60,13 @@ echo "running with $1"
             aprun -n 1 time  "$current/../hcode/Src/hydro_mono" -i "$current/../hcode/Input/input_scenario_$2_$3"
          else
 
-        aprun -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
+    if [ "$scenario" -eq "A" ]
+   then
+           aprun -n $1 -N $custom time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
 
+        else
+        aprun -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
+        fi
     fi
 
 
