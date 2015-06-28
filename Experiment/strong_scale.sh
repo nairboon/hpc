@@ -65,6 +65,8 @@ echo "running with $1"
     if [ "$scenario" -eq "A" ]
    then
            aprun -n $1 -N $custom time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
+    elif [  "$scenario" -eq "T2" ]; then
+        aprun -n $1 -S 1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
 
         else
         aprun -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
