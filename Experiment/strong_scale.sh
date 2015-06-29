@@ -68,6 +68,9 @@ echo "running with $1"
     elif [  "$scenario" -eq "T2" ]; then
         aprun --ntasks=$1 -S 1 -ss --cpu_bind=sockets time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
 
+    elif [  "$scenario" -eq "T12" ]; then
+        aprun --ntasks=$1 -S 12 -ss --cpu_bind=cores time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
+
         else
         aprun -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
         fi
