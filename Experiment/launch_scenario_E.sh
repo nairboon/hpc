@@ -8,4 +8,4 @@
 #SBATCH --error=hello_world_mpi-s.%j.err
 
 
-sbatch --nodes=21 -A uzh8 strong_scale.sh --cray E a custom 512
+sbatch --nodes=32 -A uzh8 strong_scale.sh --cray E a custom 768
