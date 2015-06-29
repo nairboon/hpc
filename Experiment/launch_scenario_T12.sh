@@ -17,3 +17,4 @@ sbatch -A uzh8 strong_scale.sh --cray T12 1440x1000 custom 24
 sbatch -A uzh8 strong_scale.sh --cray T12 1920x1000 custom 24
 sbatch -A uzh8 strong_scale.sh --cray T12 2160x1000 custom 24
 sbatch -A uzh8 strong_scale.sh --cray T12 2400x1000 custom 24
+sbatch -A uzh8 strong_scale.sh --cray T12 24000x1000 custom 24
