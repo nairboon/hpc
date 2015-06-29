@@ -29,7 +29,7 @@ def load_all(run):
         #data = np.loadtxt('%s/%s/times.log' % (path,k),delimiter=",",usecols=(3,4,5))
         fp = '%s/%s/times.log' % (path,k)
         print "parse", fp
-        p = read_csv(fp,names=["seq","T","dt","time","VmSize","VmRSS","outnum"],header=0, index_col=0)
+        p = read_csv(fp,names=["seq","T","dt","time","VmShare","VmData","VmRSS","outnum"],header=0, index_col=0)
         #print p
         #print k,data        
         bigarr[k] = p
@@ -50,12 +50,13 @@ scenarios = {}
 pi = 0
 
 
-fig = plt.figure()
 
 scenario_T2 = []
 scenario_T2_mean = []
 scenario_T2_mem = []
-scenario_T2_vmsize = []
+scenario_T2_vmdata = []
+scenario_T2_vmshare = []
+
 scenario_T2_rss = []
 
 
@@ -63,11 +64,19 @@ scenario_T2_rss = []
 scenario_T12 = []
 scenario_T12_mean = []
 scenario_T12_mem = []
-scenario_T12_vmsize = []
+scenario_T12_vmdata = []
+scenario_T12_vmshare = []
+
 scenario_T12_rss = []
 
-plotT2 = fig.add_subplot(2,1,1)
-plotT12 = fig.add_subplot(2,1,2)
+#plotT2 = fig.add_subplot(211)
+#plotT12 = fig.add_subplot(212)
+
+
+
+#fig.subplots_adjust(hspace=0.9)
+
+#plt.tight_layout()
 
 def memf(x):
     if x < 1000:
@@ -97,8 +106,9 @@ for ex in dirlist:
     
         means = arr[2]["time"].mean() 
         rss =arr[2]["VmRSS"].mean() 
-        vmsize =arr[2]["VmSize"].mean()
-        
+        vmdata =arr[2]["VmData"].mean()
+        vmshare =arr[2]["VmShare"].mean()
+
         print means
         #print arr
         var = ex.split("_")[1]
@@ -110,7 +120,9 @@ for ex in dirlist:
         tp = m/(x)#*1000*100
         mem = memf(x)
         #print x, mem, tp
-        scenario_T2_vmsize.append( vmsize/1024.0 )
+        scenario_T2_vmdata.append( vmdata/1024.0 )
+        scenario_T2_vmshare.append( vmshare/1024.0 )
+
         scenario_T2_rss.append( rss/1024.0 )
 
         scenario_T2_mem.append( mem )
@@ -121,7 +133,8 @@ for ex in dirlist:
         allsc.append(arr)
         means = arr[24]["time"].mean() 
         rss =arr[24]["VmRSS"].mean() 
-        vmsize =arr[24]["VmSize"].mean()
+        vmdata =arr[24]["VmData"].mean()
+        vmshare =arr[24]["VmShare"].mean() 
         
         var = ex.split("_")[1]
         dim = var.split("x")
@@ -133,7 +146,9 @@ for ex in dirlist:
         
         scenario_T12_mem.append( mem )
         scenario_T12_mean.append( tp )
-        scenario_T12_vmsize.append( vmsize/1024.0 )
+        scenario_T12_vmdata.append( vmdata/1024.0 )
+        scenario_T12_vmshare.append( vmshare/1024.0 )
+
         scenario_T12_rss.append( rss/1024.0 )
         scenario_T12.append( x)
         
@@ -147,14 +162,14 @@ for ex in dirlist:
 
 
 
-df = DataFrame(data = zip(scenario_T2,scenario_T2_mean,scenario_T2_mem,scenario_T2_vmsize,scenario_T2_rss), columns=['xw', 't/mp','theoretical memory',"VmSize","RSS"])
+df = DataFrame(data = zip(scenario_T2,scenario_T2_mean,scenario_T2_mem,scenario_T2_vmdata,scenario_T2_vmshare,scenario_T2_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","RSS"])
 Sorted = df.sort(['xw'], ascending=True)
 
 Sorted.index = Sorted['xw']
 Sorted.reset_index(drop=True)
 Sorted = Sorted.drop('xw',1)
 
-ax = Sorted.plot(secondary_y=["t/mp"],  ax=plotT2)
+ax = Sorted.plot(secondary_y=["t/mp"])
 ax.set_ylabel('Usage in MB')
 ax.set_xlabel('Grid width')
 
@@ -168,19 +183,19 @@ print "Min T2 runtime at: ", m
 
 
 
-df = DataFrame(data = zip(scenario_T12,scenario_T12_mean,scenario_T12_mem,scenario_T12_vmsize,scenario_T12_rss), columns=['xw', 't/mp','theoretical memory',"VmSize","RSS"])
+df = DataFrame(data = zip(scenario_T12,scenario_T12_mean,scenario_T12_mem,scenario_T12_vmdata,scenario_T12_vmshare,scenario_T12_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","RSS"])
 Sorted = df.sort(['xw'], ascending=True)
 
 Sorted.index = Sorted['xw']
 Sorted.reset_index(drop=True)
 Sorted = Sorted.drop('xw',1)
 
-ax = Sorted.plot(secondary_y=["t/mp"],  ax=plotT12)
+ax = Sorted.plot(secondary_y=["t/mp"])
 ax.set_ylabel('Usage in MB')
 ax.set_xlabel('Grid width')
 
 ax.right_ax.set_ylabel('time per 1000 cells')
-ax.axhline(y=30)
+ax.axhline(y=2.5)
 
 m = df['xw'][df['t/mp'] == df['t/mp'].min()].values[0]
 
