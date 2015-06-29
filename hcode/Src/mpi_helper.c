@@ -22,6 +22,7 @@ double *results[4];
 double *sb[4];
 
 
+
 void init_mpi(hydroparam_t H) {
 
     MPI_Init(NULL, NULL);
@@ -35,6 +36,46 @@ void init_mpi(hydroparam_t H) {
 
 
 }
+
+
+
+int cscs_read_procstatm(unsigned long *size, unsigned long *resident) {
+
+    FILE *proc;
+    const char *format = "%lu %lu %lu %lu %lu %lu %ld";
+
+    unsigned long *share;
+    unsigned long *text;
+    unsigned long *lib;
+    unsigned long *data;
+    unsigned long *dt;
+
+    proc = fopen("/proc/self/statm", "r");
+    if (proc == NULL) {
+        printf("Opening file not OK\n");
+        fclose(proc);
+        return 1;
+    }
+    else {
+        if (7 == fscanf(proc, format, size, resident, &share, &text, &lib, &data, &dt)) {
+            /*  printf("size = %lu\n", size);
+              printf("resident = %lu\n", resident);
+              printf("share = %lu\n", share);
+              printf("text = %lu\n", text);
+              printf("lib = %lu\n", lib);
+              printf("data = %lu\n", data);
+              printf("dt = %lu\n", dt);*/
+            fclose(proc);
+        }
+        else {
+            printf("Reading file not OK\n");
+            return 1;
+            fclose(proc);
+        }
+    }
+    return 0;
+}
+
 
 void post_hydro_init(const hydroparam_t H) {
 

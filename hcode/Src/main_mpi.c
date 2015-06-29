@@ -206,8 +206,15 @@ main(int argc, char **argv)
 
         //fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
         fprintf(stdout, "--> step=%-4ld %f, %f %f %s\n", H.nstep, H.t, dt, iter_time, outnum);
-        if( isMaster() )
-            fprintf(log, "%ld, %f, %f, %f, %s\n", H.nstep, H.t, dt, iter_time, outnum);
+        if( isMaster() ) {
+            unsigned long size, rss;
+            cscs_read_procstatm(&size,&rss);
+
+            fprintf(log, "%ld, %f, %f, %f, %ld, %ld, %s\n", H.nstep, H.t, dt, iter_time, size, rss, outnum);
+
+            //fprintf(stdout, "%ld %ld\n", size, rss);
+
+        }
 
 
     }   // end while loop

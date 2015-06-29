@@ -31,6 +31,7 @@ void my_cleanup(const hydroparam_t H);
 
 void store_results(long step, const hydroparam_t H, hydrovar_t * Hv);
 
+int cscs_read_procstatm(unsigned long *size, unsigned long *resident);
 
 void share_ghost_cells();
 
