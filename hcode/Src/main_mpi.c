@@ -207,10 +207,10 @@ main(int argc, char **argv)
         //fprintf(stdout, "--> step=%-4ld %12.5e, %10.5e %s\n", H.nstep, H.t, dt, outnum);
         fprintf(stdout, "--> step=%-4ld %f, %f %f %s\n", H.nstep, H.t, dt, iter_time, outnum);
         if( isMaster() ) {
-            unsigned long size, rss;
-            cscs_read_procstatm(&size,&rss);
+            unsigned long share,data, rss;
+            cscs_read_procstatm(&share,&data,&rss);
 
-            fprintf(log, "%ld, %f, %f, %f, %ld, %ld, %s\n", H.nstep, H.t, dt, iter_time, size, rss, outnum);
+            fprintf(log, "%ld, %f, %f, %f, %ld, %ld, %ld, %s\n", H.nstep, H.t, dt, iter_time, share,data, rss, outnum);
 
             //fprintf(stdout, "%ld %ld\n", size, rss);
 

@@ -39,15 +39,14 @@ void init_mpi(hydroparam_t H) {
 
 
 
-int cscs_read_procstatm(unsigned long *size, unsigned long *resident) {
+int cscs_read_procstatm(unsigned long *share,unsigned long *data, unsigned long *resident) {
 
     FILE *proc;
     const char *format = "%lu %lu %lu %lu %lu %lu %ld";
 
-    unsigned long *share;
+    unsigned long *size;
     unsigned long *text;
     unsigned long *lib;
-    unsigned long *data;
     unsigned long *dt;
 
     proc = fopen("/proc/self/statm", "r");
@@ -57,7 +56,7 @@ int cscs_read_procstatm(unsigned long *size, unsigned long *resident) {
         return 1;
     }
     else {
-        if (7 == fscanf(proc, format, size, resident, &share, &text, &lib, &data, &dt)) {
+        if (7 == fscanf(proc, format, &size, resident, share, &text, &lib, data, &dt)) {
             /*  printf("size = %lu\n", size);
               printf("resident = %lu\n", resident);
               printf("share = %lu\n", share);
