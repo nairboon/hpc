@@ -2,7 +2,7 @@
 
 
 #SBATCH --job-name="scenario_E"
-#SBATCH --time=00:20:00
+#SBATCH --time=04:30:00
 #SBATCH --ntasks-per-core=1
 #SBATCH --output=hello_world_mpi-s.%j.out
 #SBATCH --error=hello_world_mpi-s.%j.err
