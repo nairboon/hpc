@@ -162,42 +162,49 @@ for ex in dirlist:
 
 
 
-df = DataFrame(data = zip(scenario_T2,scenario_T2_mean,scenario_T2_mem,scenario_T2_vmdata,scenario_T2_vmshare,scenario_T2_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","VmRSS"])
+df = DataFrame(data = zip(scenario_T2,scenario_T2_mean,scenario_T2_mem,scenario_T2_vmdata,scenario_T2_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmRSS"])
 Sorted = df.sort(['xw'], ascending=True)
 
 Sorted.index = Sorted['xw']
 Sorted.reset_index(drop=True)
 Sorted = Sorted.drop('xw',1)
 
-ax = Sorted.plot(secondary_y=["t/mp"])
+ax = Sorted.plot(secondary_y=["t/mp"],ylim=(0,40))
 ax.set_ylabel('Usage in MB')
 ax.set_xlabel('Grid width')
 
 ax.right_ax.set_ylabel('time per 1000 cells')
+
+ax.right_ax.set_ylim(0.00025,0.0005)
+
 ax.axhline(y=30)
 
 m = df['xw'][df['t/mp'] == df['t/mp'].min()].values[0]
 
-print "Min T2 runtime at: ", m
+print "Min T2 runtime at: ", m, df['t/mp'].min()
 
 
 
 
-df = DataFrame(data = zip(scenario_T12,scenario_T12_mean,scenario_T12_mem,scenario_T12_vmdata,scenario_T12_vmshare,scenario_T12_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","VmRSS"])
+df = DataFrame(data = zip(scenario_T12,scenario_T12_mean,scenario_T12_mem,scenario_T12_vmdata,scenario_T12_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmRSS"])
 Sorted = df.sort(['xw'], ascending=True)
 
 Sorted.index = Sorted['xw']
 Sorted.reset_index(drop=True)
 Sorted = Sorted.drop('xw',1)
 
-ax = Sorted.plot(secondary_y=["t/mp"])
+ax = Sorted.plot(secondary_y=["t/mp"],ylim=(0,70))
 ax.set_ylabel('Usage in MB')
+
 ax.set_xlabel('Grid width')
 
 ax.right_ax.set_ylabel('time per 1000 cells')
+
+ax.right_ax.set_ylim(0.00025,0.0005)
+
 ax.axhline(y=2.5)
 
 m = df['xw'][df['t/mp'] == df['t/mp'].min()].values[0]
 
-print "Min T12 runtime at: ", m
+print "Min T12 runtime at: ", m, df['t/mp'].min()
 
