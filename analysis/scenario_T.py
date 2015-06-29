@@ -162,7 +162,7 @@ for ex in dirlist:
 
 
 
-df = DataFrame(data = zip(scenario_T2,scenario_T2_mean,scenario_T2_mem,scenario_T2_vmdata,scenario_T2_vmshare,scenario_T2_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","RSS"])
+df = DataFrame(data = zip(scenario_T2,scenario_T2_mean,scenario_T2_mem,scenario_T2_vmdata,scenario_T2_vmshare,scenario_T2_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","VmRSS"])
 Sorted = df.sort(['xw'], ascending=True)
 
 Sorted.index = Sorted['xw']
@@ -183,7 +183,7 @@ print "Min T2 runtime at: ", m
 
 
 
-df = DataFrame(data = zip(scenario_T12,scenario_T12_mean,scenario_T12_mem,scenario_T12_vmdata,scenario_T12_vmshare,scenario_T12_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","RSS"])
+df = DataFrame(data = zip(scenario_T12,scenario_T12_mean,scenario_T12_mem,scenario_T12_vmdata,scenario_T12_vmshare,scenario_T12_rss), columns=['xw', 't/mp','theoretical memory',"VmData","VmShare","VmRSS"])
 Sorted = df.sort(['xw'], ascending=True)
 
 Sorted.index = Sorted['xw']
