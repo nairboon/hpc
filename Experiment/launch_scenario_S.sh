@@ -10,4 +10,4 @@
 
 
 
-sbatch -A uzh8 strong_scale.sh --cray S ss b
+sbatch --nodes=22 -A uzh8 strong_scale.sh --cray S ss b
