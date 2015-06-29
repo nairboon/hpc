@@ -31,14 +31,6 @@ def load_all(run):
     return (bigarr,sorted(keys))
 
 
-
-def plot_all(ba):
-    for key in ba:
-        plt.plot(ba[key], label=key)
-    plt.legend()
-    
-    
-
 dirlist = sorted_ls('mirror/Experiment')
 
     
@@ -101,6 +93,7 @@ plt.xlabel("MPI Processes")
 plt.yscale('log')
 plt.xscale('log')
 
+plt.title("Strong scaling")
 
 plt.legend()
 
@@ -110,6 +103,8 @@ plt.figure(2)
 a = plt.plot(key,speedup,marker='o', label="measured")
 plt.plot(key,key, label="linear")
 plt.plot(key,optimal_speedup, label="optimal")
+
+plt.title("Total Speedup")
 
 #plt.ylim(0,900)
 
