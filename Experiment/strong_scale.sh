@@ -23,7 +23,7 @@ size=$4
 custom=$5
 
 
-big="8 10 12 16 20 24 30 40 48 64 128 256 384 512 8 6 3 2 1"
+big="8 10 16 20 24 30 40 48 64 128 192 256 320 384 512 640 768 1280 1536 6 3"
 
 #big="8 24 64 128"
 
@@ -74,7 +74,7 @@ echo "running with $1"
 
 
         elif [  "$scenario" -eq "S" ]; then
-        aprun -N 22 --ntasks=$1 -S 12 -ss -m plane=24:block --cpu_bind=cores time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
+        aprun -N 64 --ntasks=$1 -S 12 -ss -m plane=24:block --cpu_bind=cores time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
         else
 
         aprun -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"

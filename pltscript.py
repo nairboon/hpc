@@ -51,6 +51,7 @@ pi = 0
 
 scenario_D = []
 scenario_T2 = []
+scenario_T2_mem = []
 scenario_T12 = []
 for ex in dirlist:
     s = ex.split("_")[0]
@@ -59,9 +60,10 @@ for ex in dirlist:
     means = []
 
     if not scenarios.has_key(s):
-        scenarios[s] = fig.add_subplot(6,1,pi)
+        scenarios[s] = fig.add_subplot(1,1,pi)
         scenarios[s].set_yscale('log')
-
+        scenarios[s].set_xscale('log')
+        
         pi+=1
         
     
@@ -82,7 +84,9 @@ for ex in dirlist:
         m = means[0]
         x=int(dim[0])/2
         tp = m/(x)
-        print x, tp
+        mem = float(1000*((4*x)+82)*8.0/1024.0/1024.0)
+        print x, mem, tp
+        scenario_T2_mem.append( (x,mem ))
         scenario_T2.append( (x,tp ))
     elif s == "T12":
         var = ex.split("_")[1]
@@ -112,6 +116,9 @@ x,y = zip(*sd)
 print "Min time is at: ", min(sd,key=itemgetter(1))
 scenarios["T2"].set_yscale('linear')
 scenarios["T2"].plot(x,y,marker='o', label=ex)
+sd =sorted(scenario_T2_mem, key=itemgetter(0))
+x,y = zip(*sd)
+scenarios["T2"].plot(x,y,marker='x', label="mem")
 
 sd =sorted(scenario_T12, key=itemgetter(0))
 x,y = zip(*sd)

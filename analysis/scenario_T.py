@@ -169,7 +169,7 @@ Sorted.index = Sorted['xw']
 Sorted.reset_index(drop=True)
 Sorted = Sorted.drop('xw',1)
 
-ax = Sorted.plot(secondary_y=["t/mp"],ylim=(0,40))
+ax = Sorted.plot(secondary_y=["t/mp"],marker='o',ylim=(0,40))
 ax.set_ylabel('Usage in MB')
 ax.set_xlabel('Grid width')
 
@@ -193,7 +193,7 @@ Sorted.index = Sorted['xw']
 Sorted.reset_index(drop=True)
 Sorted = Sorted.drop('xw',1)
 
-ax = Sorted.plot(secondary_y=["t/mp"],ylim=(0,70))
+ax = Sorted.plot(secondary_y=["t/mp"],marker='o',ylim=(0,70))
 ax.set_ylabel('Usage in MB')
 
 ax.set_xlabel('Grid width')
