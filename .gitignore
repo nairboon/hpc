@@ -3,5 +3,5 @@ Output/*
 *.xcodeproj
 *.DS_Store
 
-Experiment/*
+analysis/mirror/
 hcode/Arch/make.inc
