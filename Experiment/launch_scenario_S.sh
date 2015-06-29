@@ -10,4 +10,4 @@
 
 
 
-sbatch -A uzh8 strong_scale.sh --cray A ss b
+sbatch -A uzh8 strong_scale.sh --cray S ss b
