@@ -96,13 +96,13 @@ plt.xscale('log')
 plt.title("Strong scaling")
 
 plt.legend()
-
+plt.savefig("strongscale.png", bbox_inches='tight')
 plt.show()
 
 plt.figure(2)
 a = plt.plot(key,speedup,marker='o', label="measured")
 plt.plot(key,key, label="linear")
-plt.plot(key,optimal_speedup, label="optimal")
+plt.plot(key,optimal_speedup, label="predicted")
 
 plt.title("Total Speedup")
 
@@ -117,3 +117,4 @@ plt.ylabel("Speedup")
 plt.xlabel("MPI Processes")
 
 plt.legend()
+plt.savefig("speedup.png", bbox_inches='tight')

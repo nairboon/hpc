@@ -207,7 +207,6 @@ main(int argc, char **argv)
         if( isMaster() ) {
 
             fprintf(stdout, "--> step=%-4ld %f, %f %f %s\n", H.nstep, H.t, dt, iter_time, outnum);
-            
             unsigned long share,data, rss;
             cscs_read_procstatm(&share,&data,&rss);
 

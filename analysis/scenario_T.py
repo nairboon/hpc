@@ -179,6 +179,13 @@ ax.right_ax.set_ylim(0.00025,0.0005)
 
 ax.axhline(y=30)
 
+
+plt.legend(loc=4)
+ax.legend(loc=4)
+
+plt.savefig("T2.png", bbox_inches='tight')
+
+           
 m = df['xw'][df['t/mp'] == df['t/mp'].min()].values[0]
 
 print "Min T2 runtime at: ", m, df['t/mp'].min()
@@ -193,7 +200,7 @@ Sorted.index = Sorted['xw']
 Sorted.reset_index(drop=True)
 Sorted = Sorted.drop('xw',1)
 
-ax = Sorted.plot(secondary_y=["t/mp"],marker='o',ylim=(0,70))
+ax = Sorted.plot(secondary_y=["t/mp"],ylim=(0,70))
 ax.set_ylabel('Usage in MB')
 
 ax.set_xlabel('Grid width')
@@ -208,3 +215,7 @@ m = df['xw'][df['t/mp'] == df['t/mp'].min()].values[0]
 
 print "Min T12 runtime at: ", m, df['t/mp'].min()
 
+plt.legend(loc=4)
+ax.legend(loc=4)
+
+plt.savefig("T12.png", bbox_inches='tight')
