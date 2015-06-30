@@ -96,7 +96,7 @@ plt.xscale('log')
 plt.title("Strong scaling")
 
 plt.legend()
-plt.savefig("strongscale.png", bbox_inches='tight')
+plt.savefig("strongscale.pdf", bbox_inches='tight')
 plt.show()
 
 plt.figure(2)
@@ -117,4 +117,4 @@ plt.ylabel("Speedup")
 plt.xlabel("MPI Processes")
 
 plt.legend()
-plt.savefig("speedup.png", bbox_inches='tight')
+plt.savefig("speedup.pdf", bbox_inches='tight')

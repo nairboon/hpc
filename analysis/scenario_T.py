@@ -183,7 +183,7 @@ ax.axhline(y=30)
 plt.legend(loc=4)
 ax.legend(loc=4)
 
-plt.savefig("T2.png", bbox_inches='tight')
+plt.savefig("T2.pdf", bbox_inches='tight')
 
            
 m = df['xw'][df['t/mp'] == df['t/mp'].min()].values[0]
@@ -218,4 +218,4 @@ print "Min T12 runtime at: ", m, df['t/mp'].min()
 plt.legend(loc=4)
 ax.legend(loc=4)
 
-plt.savefig("T12.png", bbox_inches='tight')
+plt.savefig("T12.pdf", bbox_inches='tight')
