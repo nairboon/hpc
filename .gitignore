@@ -3,5 +3,6 @@ Output/*
 *.xcodeproj
 *.DS_Store
 
+slide/hpc1b_pres.pdf
 analysis/mirror/
 hcode/Arch/make.inc
