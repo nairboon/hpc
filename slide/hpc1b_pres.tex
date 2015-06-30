@@ -154,12 +154,12 @@ The initial condition is an explosion in the lower left corner, which emerges to
 \begin{frame}
 \frametitle{Parallelization: Strategy}
 
-We implemented a symetric vertical domain decomposition\footnote{ 
+We implemented a symmetric vertical domain decomposition\footnote{ 
 \emph{Restriction: $width\in W,~~W=\{k\cdot n_{proc}|k\in\mathbb{N}\}$ } } and used nonblocking MPI communication to share ghost cells.\\
 \vspace{2mm}
 Since the resulting data output is massive (\textasciitilde{}600Mb for a 10M grid per step) it is currently unpractical to store the results from every step. Therefore we opted for a lower storage resolution. This allows us to implement the "write-to-disk" part in a rather sub-optimal way: MPI\_Gather to the master. However the performance impact of this strategy is negligible with sparing data writing.\\
 \vspace{2mm}
-Further we minimized memory reallocations and reused buffers to improve data locality for exploing the cache. \\
+Further we minimized memory reallocations and reused buffers to improve data locality for exploiting the cache. \\
 
 \end{frame}
 
@@ -199,7 +199,7 @@ Investigating gridsize memory usage on cache trashing for  on a 1/socket \footno
 \begin{frame}
 \frametitle{Exploratory runs II}
 
-Theoretical memory usage was predicted through analysing allocations throughout the code with: $m(x_{wdith},y_{height})=\begin{cases}
+Theoretical memory usage was predicted through analyzing allocations throughout the code with: $m(x_{wdith},y_{height})=\begin{cases}
 y>x & y(4x+82)\\
 y<x & x(4y+66)+16y\end{cases}$ \\
 VmData, VmRSS: actual measures\footnote{see \emph{man proc}}. We can see a lower computing time per cell when at least the working set fits into the LLC=30MB\footnote{Intel® Xeon® E5-2690 v3}\\ The high memory usage of the 12/socket case is probably due to MPI overhead.
@@ -218,12 +218,12 @@ Therefore we predict an optimal performance using a working set of around $150\t
 \vspace{5mm}
 \justify
 
-We compare the average time step durations up to approximatly 1536 parallel processses with the time of the mono version.
+We compare the average time step durations up to approximately 1536 parallel processes with the time of the mono version.
 
 The predicted speedup according to Amdahl's law was estimated based on the measured speedup (s) for a given number of processes (n) with: $P_{predicted}=\frac{\frac{1}{s}-1}{\frac{1}{n}-1}$
 
 
-We explain the super-linear speedup with our choice of parameters (grid size, nProc) to exploit caches optimaly.
+We explain the super-linear speedup with our choice of parameters (grid size, nProc) to exploit caches optimally.
 
 
 
