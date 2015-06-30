@@ -33,13 +33,13 @@
 %\usetheme{CambridgeUS}
 %\usetheme{Copenhagen}
 %\usetheme{Darmstadt}
-\usetheme{Dresden}
+%\usetheme{Dresden}
 %\usetheme{Frankfurt}
 %\usetheme{Goettingen}
 %\usetheme{Hannover}
 %\usetheme{Ilmenau}
 %\usetheme{JuanLesPins}
-%\usetheme{Luebeck}
+\usetheme{Luebeck}
 %\usetheme{Madrid}
 %\usetheme{Malmoe}
 %\usetheme{Marburg}
@@ -55,7 +55,7 @@
 % for any slide theme. Uncomment each of these in turn to see how it
 % changes the colors of your current slide theme.
 
-%\usecolortheme{albatross}
+\usecolortheme{albatross}
 %\usecolortheme{beaver}
 %\usecolortheme{beetle}
 %\usecolortheme{crane}
@@ -130,17 +130,17 @@ Stephan Radonic} % Your name
 \begin{frame}
 \frametitle{Introduction and physics}
 \justify
-Our task was to parallelize an existing code, which solves the Euler equations in 2D using a godunov scheme. A hyperbolic PDE in conservation law form is representend by a written as
+Our task was to parallelize an existing C code, originally written by Prof. Romain Teyssier in Fortran, which solves the Euler equations in 2D using a Godunov scheme. A hyperbolic PDE in conservation law form is represented as
 \begin{equation}
 \partial_t\mathbf{U} + \nabla\cdot\mathbf{F(U)} = 0
 \label{eq:bb}
 \end{equation}
-The euler equations are a set of equations which basicaly state the momentum, mass and energy conservation. Discretization on a grid yields
+The euler equations are a set of equations which basically state the momentum, mass and energy conservation. Discretization on a grid yields
 \begin{equation}
 \mathbf{U}^{n+1}_i=\mathbf{U^n_i}+\frac{\Delta x}{\Delta t}(\mathbf{F_{i-1/2}}-\mathbf{F_{i+1/2}})
 \label{eq:bc}
 \end{equation}
-where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the godunov scheme uses various approximations for $\mathbf{F_{i\pm1/2}}$
+where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov scheme uses various approximations for $\mathbf{F_{i\pm1/2}}$, depending on the specific variation of the method, e.g upwind scheme, lax-friedrich, ...
 \vspace{1mm}
 
 \end{frame}
@@ -209,9 +209,9 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 %
 %
 \begin{frame}
-\frametitle{High resolution example}
+\frametitle{Output image}
 \justify
-
+To show the power of parallel processing we wanna show an excerpt from our high resolution image (15000 x 500) at simulation time t=600 seconds (corresponds to the 200'000th time step in our simulation)
 \begin{figure}
 \includegraphics[width=12cm]{thube2.png}
 \end{figure}
