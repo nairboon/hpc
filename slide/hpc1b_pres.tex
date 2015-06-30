@@ -147,7 +147,7 @@ where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov 
 We implemented a symmetric vertical domain decomposition\footnote{ 
 \emph{Restriction: $width\in W,~~W=\{k\cdot n_{proc}|k\in\mathbb{N}\}$ } } and used nonblocking MPI communication to share ghost cells.\\
 \vspace{2mm}
-Since the resulting data output is massive (\textasciitilde{}600Mb for a 10M grid per step) it is currently unpractical to store the results from every step. Therefore we opted for a lower storage resolution. This allows us to implement the "write-to-disk" part in a rather sub-optimal way: MPI\_Gather to the master. However the performance impact of this strategy is negligible with sparing data writing.\\
+Since the resulting data output is massive (\textasciitilde{}600Mb for a 10M grid per step) it is currently unpractical to store the results from every step. Therefore we opted for a lower writing frequency. This allows us to implement the "write-to-disk" part in a rather sub-optimal way: MPI\_Gather to the master. However the performance impact of this strategy is negligible with sparing data writing.\\
 \vspace{2mm}
 Further we minimized memory reallocations and reused buffers to improve data locality for exploiting the cache. \\
 
