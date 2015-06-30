@@ -142,7 +142,7 @@ where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov 
 \frametitle{Parallelization}
 
 We implemented a symetric vertical domain decomposition\footnote{ 
-\emph{Restriction: $Width=\{n_{proc}k|k\in\mathbb{N}\}$ } } and used nonblocking MPI communication to share ghost cells.\\
+\emph{Restriction: $width\in W,~~W=\{k\cdot n_{proc}|k\in\mathbb{N}\}$ } } and used nonblocking MPI communication to share ghost cells.\\
 
 Since the resulting data output is massive (\textasciitilde{}600Mb for a 10M grid per step) it is currently unpractical to store the results from every step. Therefore we opted for a lower storage resolution. This allows us to implement the "write-to-disk" part in a rather sub-optimal way: MPI\_Gather to the master. However the performance impact of this strategy is negligible over a long simulation time.\\
 
