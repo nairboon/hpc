@@ -69,6 +69,9 @@
 \usepackage{hyperref}
 \usepackage{tcolorbox}
 \usepackage{ragged2e}
+
+\setbeamertemplate{caption}[numbered]
+
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -143,30 +146,56 @@ where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov 
 
 We implemented a symetric vertical domain decomposition\footnote{ 
 \emph{Restriction: $width\in W,~~W=\{k\cdot n_{proc}|k\in\mathbb{N}\}$ } } and used nonblocking MPI communication to share ghost cells.\\
-
-Since the resulting data output is massive (\textasciitilde{}600Mb for a 10M grid per step) it is currently unpractical to store the results from every step. Therefore we opted for a lower storage resolution. This allows us to implement the "write-to-disk" part in a rather sub-optimal way: MPI\_Gather to the master. However the performance impact of this strategy is negligible over a long simulation time.\\
-
- 
-
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Exploratory runs}
-
-\end{frame}
-
-
-%
-%
-%
-\begin{frame}
-\frametitle{Parallelization: Speedup and Scaling}
-\justify
-We compare the average time step durations for a single process up to approximatly 1500 parallel processses for a fixed problem size (in our case 60994 x 120). As observable in the strong scaling graph (ref figure) we get a super linear scaling up to 800 processes. 
-The super linearity of the scaling can be explained with cache usage effects. \\
 \vspace{2mm}
-Oprimal cache memory usage only works well for rectangular shaped domains (large x small y for parallelization in x direction). We have compared how a fixed sized problem performs with diffrent $x/y$ ratios (see figure xx). We can cleary see that the performance increases with deacrasing $y/x$ size, up to a ratio, where each processes computing domain gets too small and becomes inefficient. 
+Since the resulting data output is massive (\textasciitilde{}600Mb for a 10M grid per step) it is currently unpractical to store the results from every step. Therefore we opted for a lower storage resolution. This allows us to implement the "write-to-disk" part in a rather sub-optimal way: MPI\_Gather to the master. However the performance impact of this strategy is negligible with sparing data writing.\\
+\vspace{2mm}
+Further we minimized memory reallocations and reused buffers to improve data locality for exploing the cache. \\
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Exploratory runs I}
+Investigating gridsize memory usage on cache trashing for  on a 1/socket \footnote{aprun -N 1 --ntasks=1 -S 1 -ss --cpu\_bind=sockets} and a 12/socket run.\footnote{aprun -N 1 --ntasks=1 -S 12 -ss -m plane=24:block --cpu\_bind=cores} with y=1000 \footnotesize{[t/mp = time to calculate 1m cells]}
+
+\begin{minipage}[1\textheight]{\textwidth}
+\begin{columns}[T]
+
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=6.15cm]{T2.pdf}
+\caption{ 2 processes per node}
+\end{figure}
+
+\end{column}
+
+
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=6.15cm]{T12.pdf}
+\caption{24 processes per node}
+\end{figure}
+\end{column}
+\end{columns}
+\end{minipage}
+
+
+
+\end{frame}
+
+
+%
+%
+%
+\begin{frame}
+\frametitle{Exploratory runs II}
+
+Theoretical memory usage was predicted through analysing allocations throughout the code with: $m(x_{wdith},y_{height})=\begin{cases}
+y>x & y(4x+82)\\
+y<x & x(4y+66)+16y\end{cases}$ \\
+VmData, VmRSS: actual measures\footnote{see \emph{man proc}}. We can see a lower computing time per cell when at least the working set fits into the LLC=30MB\footnote{Intel® Xeon® E5-2690 v3}\\ The high memory usage of the 12/socket case is probably due to MPI overhead.
+ 
+Therefore we predict an optimal performance using a working set of around $150\times1000$ per MPI process.
+
 \end{frame}
 %
 %
@@ -203,6 +232,16 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 \vspace{5mm}
 \justify
 ...tzututzut
+
+
+We compare the average time step durations for a single process up to approximatly 1500 parallel processses for a fixed problem size (in our case 60994 x 120). As observable in the strong scaling graph (ref figure) we get a super linear scaling up to 800 processes. 
+The super linearity of the scaling can be explained with cache usage effects. \\
+\vspace{2mm}
+
+Oprimal cache memory usage only works well for rectangular shaped domains (large x small y for parallelization in x direction). We have compared how a fixed sized problem performs with diffrent $x/y$ ratios (see figure xx). We can cleary see that the performance increases with deacrasing $y/x$ size, up to a ratio, where each processes computing domain gets too small and becomes inefficient. \\
+
+
+
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
