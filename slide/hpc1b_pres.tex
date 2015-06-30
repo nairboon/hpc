@@ -244,6 +244,7 @@ We explain the super-linear speedup with our choice of parameters (grid size, nP
 %
 \begin{frame}
 \frametitle{Parallelization: Strong Scaling}
+
 \begin{minipage}[1\textheight]{\textwidth}
 \begin{columns}[T]
 \begin{column}{0.7\textwidth}
@@ -253,9 +254,9 @@ We explain the super-linear speedup with our choice of parameters (grid size, nP
 \end{figure}
 \end{column}
 
-\begin{column}{0.5\textwidth}
+\begin{column}{0.3\textwidth}
 \justify
-hhjk
+We can see that with $>512$ processors the MPI communication overhead is having a heavy impact on the performance.
 
 
 \end{column}
@@ -269,13 +270,45 @@ hhjk
 %
 %
 \begin{frame}
-\frametitle{Output image}
+\frametitle{Output image I}
 \justify
-To show the power of parallel processing we wanna show an excerpt from our high resolution image (3060 x 500) at simulation time t=600 seconds (corresponds to the 200'000th time step in our simulation). In order to avoid unnecessary wasting of computing resources, we didn't want to use a larger grid size. 
+To use the provided computing resources economically we constrained ourself to a $3360\times510$ grid with 112 MPI processes on 5 nodes (run time: 1:02:21)\\
+
+\vspace{-5mm}
 \begin{figure}
-\includegraphics[width=12cm]{speedup.pdf}
+\includegraphics[width=12.2cm]{7c.png}
+\caption{$t=461$}
 \end{figure}
+
+\vspace{-7mm}
+\begin{figure}
+\includegraphics[width=12.2cm]{10c.png}
+\caption{$t=1772$}
+\end{figure}
+
+
+
 \end{frame}
+%
+%
+%
+\begin{frame}
+\frametitle{Output image II}
+
+\begin{figure}
+\includegraphics[width=12.2cm]{13c.png}
+\caption{$t=4543$}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=12.2cm]{17c.png}
+\caption{$t=9230$}
+\end{figure}
+
+
+
+\end{frame}
+
 %
 %
 %
