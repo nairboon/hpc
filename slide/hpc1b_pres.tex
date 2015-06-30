@@ -152,7 +152,7 @@ The initial condition is an explosion in the lower left corner, which emerges to
 %
 %
 \begin{frame}
-\frametitle{Parallelization}
+\frametitle{Parallelization: Strategy}
 
 We implemented a symetric vertical domain decomposition\footnote{ 
 \emph{Restriction: $width\in W,~~W=\{k\cdot n_{proc}|k\in\mathbb{N}\}$ } } and used nonblocking MPI communication to share ghost cells.\\
@@ -211,44 +211,19 @@ Therefore we predict an optimal performance using a working set of around $150\t
 %
 %
 \begin{frame}
-\frametitle{Parallelization: Speedup and Scaling}
-\begin{minipage}[1\textheight]{\textwidth}
-\begin{columns}[T]
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\includegraphics[width=6.75cm]{strongscale.pdf}
-\caption{Strong scaling for a fixed grid size of $69994\times 120$ for 1 to 1536 processes. with the time step decreasing from 4.65 to 0.009}
-\end{figure}
-\end{column}
-
-
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\includegraphics[width=6.75cm]{speedup.pdf}
-\caption{Performance comparison of a fixed sized grid with varinyg $y/x$ ratio}
-\end{figure}
-\end{column}
-\end{columns}
-\end{minipage}
-\end{frame}
-%
-%
-%
-\begin{frame}
-\frametitle{Parallelization: Speedup and Scaling}
+\frametitle{Parallelization: Speedup}
 \begin{minipage}[1\textheight]{\textwidth}
 \begin{columns}[T]
 \begin{column}{0.5\textwidth}
 \vspace{5mm}
 \justify
-...tzututzut
+
+We compare the average time step durations up to approximatly 1536 parallel processses with the time of the mono version.
+
+The predicted speedup according to Amdahl's law was estimated based on the measured speedup (s) for a given number of processes (n) with: $P_{predicted}=\frac{\frac{1}{s}-1}{\frac{1}{n}-1}$
 
 
-We compare the average time step durations for a single process up to approximatly 1500 parallel processses for a fixed problem size (in our case 60994 x 120). As observable in the strong scaling graph (ref figure) we get a super linear scaling up to 800 processes. 
-The super linearity of the scaling can be explained with cache usage effects. \\
-\vspace{2mm}
-
-Oprimal cache memory usage only works well for rectangular shaped domains (large x small y for parallelization in x direction). We have compared how a fixed sized problem performs with diffrent $x/y$ ratios (see figure xx). We can cleary see that the performance increases with deacrasing $y/x$ size, up to a ratio, where each processes computing domain gets too small and becomes inefficient. \\
+We explain the super-linear speedup with our choice of parameters (grid size, nProc) to exploit caches optimaly.
 
 
 
@@ -256,12 +231,40 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \includegraphics[width=6cm]{speedup.pdf}
-\caption{}
+\caption{Speedup on a grid of $20480\times 492$}
+
 \end{figure}
 \end{column}
 \end{columns}
 \end{minipage}
 \end{frame}
+
+%
+%
+%
+\begin{frame}
+\frametitle{Parallelization: Strong Scaling}
+\begin{minipage}[1\textheight]{\textwidth}
+\begin{columns}[T]
+\begin{column}{0.7\textwidth}
+\begin{figure}
+\includegraphics[width=6.55cm]{strongscale.pdf}
+\caption{grid of $20480\times 492$ for 1 to 1536 processes. Time step decreasing from 4.65 to 0.009}
+\end{figure}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\justify
+hhjk
+
+
+\end{column}
+\end{columns}
+\end{minipage}
+
+
+\end{frame}
+
 %
 %
 %
