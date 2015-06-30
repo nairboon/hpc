@@ -7,8 +7,8 @@ on_output=.false.
 /
 
 &MESH
-nx=5376
-ny=501
+nx=3360
+ny=1000
 dx=0.01
 boundary_left=1
 boundary_right=1

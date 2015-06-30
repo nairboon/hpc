@@ -75,7 +75,7 @@ echo "running with $1"
         aprun -N 64 --ntasks=$1 -S 12 -ss -m plane=24:block --cpu_bind=cores time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
 
         elif [  "$scenario" -eq "E" ]; then
-        aprun -N 32 --ntasks=$1 -S 12 -ss -m plane=24:block --cpu_bind=cores time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
+        aprun -N 1 --ntasks=$1 -S 12 -ss -m plane=24:block --cpu_bind=cores time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
         else
 
         aprun -n $1 time "$current/../hcode/Src/hydro_mpi" -i "$current/../hcode/Input/input_scenario_$2_$3"
