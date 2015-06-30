@@ -1,20 +1,3 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Beamer Presentation
-% LaTeX Template
-% Version 1.0 (10/11/12)
-%
-% This template has been downloaded from:
-% http://www.LaTeXTemplates.com
-%
-% License:
-% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND THEMES
-%----------------------------------------------------------------------------------------
-
 \documentclass{beamer}
 
 \mode<presentation> {
@@ -150,7 +133,22 @@ where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov 
 \begin{frame}
 \frametitle{Parallelization}
 
+We implemented a symetric vertical domain decomposition\footnote{ 
+\emph{Restriction: $Width=\{n_{proc}k|k\in\mathbb{N}\}$ } } and used nonblocking MPI communication to share ghost cells.\\
+
+Since the resulting data output is massive (\textasciitilde{}600Mb for a 10M grid per step) it is currently unpractical to store the results from every step. Therefore we opted for a lower storage resolution. This allows us to implement the "write-to-disk" part in a rather sub-optimal way: MPI\_Gather to the master. However the performance impact of this strategy is negligible over a long simulation time.\\
+
+ 
+
+
 \end{frame}
+
+\begin{frame}
+\frametitle{Exploratory runs}
+
+\end{frame}
+
+
 %
 %
 %
@@ -175,9 +173,11 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 \caption{Strong scaling for a fixed grid size of $69994\times 120$ for 1 to 1536 processes. with the time step decreasing from 4.65 to 0.009}
 \end{figure}
 \end{column}
+
+
 \begin{column}{0.5\textwidth}
 \begin{figure}
-\includegraphics[width=6.75cm]{strongscale.pdf}
+\includegraphics[width=6.75cm]{speedup.pdf}
 \caption{Performance comparison of a fixed sized grid with varinyg $y/x$ ratio}
 \end{figure}
 \end{column}
