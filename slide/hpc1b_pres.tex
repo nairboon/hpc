@@ -189,7 +189,7 @@ Investigating gridsize memory usage on cache trashing for  on a 1/socket \footno
 \begin{frame}
 \frametitle{Exploratory runs II}
 
-Theoretical memory usage was predicted through analyzing allocations throughout the code with: $m(x_{wdith},y_{height})=\begin{cases}
+Theoretical memory usage was predicted through analyzing allocations throughout the code with: $m(x_{width},y_{height})=\begin{cases}
 y>x & y(4x+82)\\
 y<x & x(4y+66)+16y\end{cases}$ \\
 VmData, VmRSS: actual measures\footnote{see \emph{man proc}}. We can see a lower computing time per cell when at least the working set fits into the LLC=30MB\footnote{Intel® Xeon® E5-2690 v3}\\ The high memory usage of the 12/socket case is probably due to MPI overhead.
