@@ -30,7 +30,7 @@
 %\usetheme{Berkeley}
 %\usetheme{Berlin}
 %\usetheme{Boadilla}
-%\usetheme{CambridgeUS}
+\usetheme{CambridgeUS}
 %\usetheme{Copenhagen}
 %\usetheme{Darmstadt}
 %\usetheme{Dresden}
@@ -39,7 +39,7 @@
 %\usetheme{Hannover}
 %\usetheme{Ilmenau}
 %\usetheme{JuanLesPins}
-\usetheme{Luebeck}
+%\usetheme{Luebeck}
 %\usetheme{Madrid}
 %\usetheme{Malmoe}
 %\usetheme{Marburg}
@@ -55,7 +55,7 @@
 % for any slide theme. Uncomment each of these in turn to see how it
 % changes the colors of your current slide theme.
 
-\usecolortheme{albatross}
+%\usecolortheme{albatross}
 %\usecolortheme{beaver}
 %\usecolortheme{beetle}
 %\usecolortheme{crane}
@@ -148,14 +148,14 @@ where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov 
 %
 %
 \begin{frame}
-\frametitle{Parallelization strategy}
+\frametitle{Parallelization}
 
 \end{frame}
 %
 %
 %
 \begin{frame}
-\frametitle{Serial vs. Parallel Processing}
+\frametitle{Parallelization: Speedup and Scaling}
 \justify
 We compare the average time step durations for a single process up to approximatly 1500 parallel processses for a fixed problem size (in our case 60994 x 120). As observable in the strong scaling graph (ref figure) we get a super linear scaling up to 800 processes. 
 The super linearity of the scaling can be explained with cache usage effects. \\
@@ -166,7 +166,7 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 %
 %
 \begin{frame}
-\frametitle{Scaling and Speedup}
+\frametitle{Parallelization: Speedup and Scaling}
 \begin{minipage}[1\textheight]{\textwidth}
 \begin{columns}[T]
 \begin{column}{0.5\textwidth}
@@ -188,7 +188,7 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 %
 %
 \begin{frame}
-\frametitle{Scaling and Speedup}
+\frametitle{Parallelization: Speedup and Scaling}
 \begin{minipage}[1\textheight]{\textwidth}
 \begin{columns}[T]
 \begin{column}{0.5\textwidth}
@@ -211,7 +211,7 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 \begin{frame}
 \frametitle{Output image}
 \justify
-To show the power of parallel processing we wanna show an excerpt from our high resolution image (15000 x 500) at simulation time t=600 seconds (corresponds to the 200'000th time step in our simulation)
+To show the power of parallel processing we wanna show an excerpt from our high resolution image (3060 x 500) at simulation time t=600 seconds (corresponds to the 200'000th time step in our simulation). In order to avoid unnecessary wasting of computing resources, we didn't want to use a larger grid size. 
 \begin{figure}
 \includegraphics[width=12cm]{thube2.png}
 \end{figure}
