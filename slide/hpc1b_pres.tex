@@ -113,17 +113,25 @@ University of Zurich
 \begin{frame}
 \frametitle{Introduction and physics}
 \justify
-Our task was to parallelize an existing C code, originally written by Prof. Romain Teyssier in Fortran, which solves the Euler equations in 2D using a Godunov scheme. A hyperbolic PDE in conservation law form is represented as
+\small{
+Our task was to parallelize an existing C code, originally written by Prof. Romain Teyssier in Fortran, which solves the Euler equations in 2D using a Godunov scheme. The euler equations in conservation form are 
+\begin{equation}
+\partial_t
+\begin{pmatrix} \rho    \\ \rho \mathbf{u}\\0\end{pmatrix}+\nabla\cdot\begin{pmatrix} \rho\mathbf{u}    \\ \rho\mathbf{u}\otimes\mathbf{u}+p\mathbf{I}\\ \mathbf{u}\end{pmatrix} = 0
+\end{equation}
+This set of equations describes the flow of a gas basically stating the momentum, mass and energy conservation. A hyperbolic PDE in conservation law form is generally represented as
 \begin{equation}
 \partial_t\mathbf{U} + \nabla\cdot\mathbf{F(U)} = 0
 \label{eq:bb}
 \end{equation}
-The euler equations are a set of equations which basically state the momentum, mass and energy conservation. Discretization on a grid yields
+Discretization on a grid yields
 \begin{equation}
 \mathbf{U}^{n+1}_i=\mathbf{U^n_i}+\frac{\Delta x}{\Delta t}(\mathbf{F_{i-1/2}}-\mathbf{F_{i+1/2}})
 \label{eq:bc}
 \end{equation}
-where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov scheme uses various approximations for $\mathbf{F_{i\pm1/2}}$, depending on the specific variation of the method, e.g upwind scheme, lax-friedrich, ...
+where $\mathbf{F_{i\pm1/2}}$ are the fluxes at the cell boundaries, the Godunov scheme uses various approximations for $\mathbf{F_{i\pm1/2}}$, depending on the specific variation of the method, e.g upwind scheme, lax-friedrich, ... \\
+}
+\\
 \vspace{1mm}
 
 \end{frame}
@@ -198,7 +206,7 @@ Oprimal cache memory usage only works well for rectangular shaped domains (large
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{figure}
-\includegraphics[width=6.75cm]{speedup.pdf}
+\includegraphics[width=6cm]{speedup.pdf}
 \caption{}
 \end{figure}
 \end{column}
